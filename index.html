@@ -4,35 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dilse TV | Watch Live HD</title>
-    <meta name="description" content="Dilse TV - Live Sports, Kids and Indian Channels. Developed by Awais Haider.">
-    
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style id="poison-css">/* Injected by JS */</style>
+    <style id="dilse-css"></style>
 </head>
 <body>
 
-<div id="sparkle-wrap"></div>
-<header id="top-nav"></header>
+<div id="sparkle-container"></div>
 
 <section class="hero-poster">
-    <h1 id="main-title">DILSE TV</h1>
-    <p id="sub-title">Premium HD Streaming Experience</p>
+    <h1 class="main-title">DILSE TV</h1>
+    <p>Premium Live HD Streaming Experience</p>
 </section>
 
-<div class="search-wrap">
-    <input type="text" id="searchInput" placeholder="Search Channels (e.g. PTV, Sony, Kids...)">
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search Channels (e.g. Sports, Kids, Entertainment...)">
 </div>
 
 <div class="player-container">
     <div class="video-shell">
-        <div id="stylish-loader">DILSE TV LOADING...</div>
+        <div id="loading-overlay">DILSE TV LOADING...</div>
         <video id="player" controls autoplay playsinline></video>
     </div>
 </div>
 
-<div class="tabs-bar">
+<div class="tabs-nav">
     <div class="tab active" data-cat="Sports">Sports</div>
     <div class="tab" data-cat="Tamasha Premium">Tamasha</div>
     <div class="tab" data-cat="Kids">Kids Zone</div>
@@ -40,43 +37,45 @@
     <div class="tab" data-cat="Global">Global</div>
 </div>
 
-<div class="grid-layout" id="channelGrid"></div>
+<div class="grid-view" id="channelGrid"></div>
 
-<footer id="footer-section"></footer>
+<footer id="footer"></footer>
 
 <script>
 (function(){
-    // --- POISON CSS & BRANDING ---
-    const _0x_design = "Ym9keXtiYWNrZ3JvdW5kOiMwMDA7Y29sb3I6I2ZmZjtmb250LWZhbWlseTonUG9wcGlucyosc2Fucy1zZXJpZjttYXJnaW46MDt0ZXh0LWFsaWduOmNlbnRlcjt9Lmhlcm8tcG9zdGVye3BhZGRpbmc6NTBweCAyMHB4O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KHRvIGJvdHRvbSxyZ2JhKDAsMCwwLDAuOCksIzAwMCksdXJsKCdodHRwczovL2ltYWdlcy51bnNwbGFzaC5jb20vcGhvdG8tMTUwNDQ1MDNzODQ4MS03MzM4ZWJhNzUyNGEnKTtiYWNrZ3JvdW5kLXNpemU6Y292ZXI7YmFja2dyb3VuZC1wb3NpdGlvbjpjZW50ZXI7fSNtYWluLXRpdGxlIHtmb250LWZhbWlseTonUmlnaHRlb3VzJztjb2xvcjojZTUwOTE0O2ZvbnQtc2l6ZTo2MHB4O21hcmdpbjowO3RleHQtc2hhZG93OjAgMCAyMHB4IHJnYmEoMjI5LDksMjAsMC42KTt9LnNlYXJjaC13cmFwIHt3aWR0aDo5MCU7bWF4LXdpZHRoOjU1MHB4O21hcmdpbjotMzBweCBhdXRvIDAgYXV0bztwb3NpdGlvbjpyZWxhdGl2ZTt6LWluZGV4OjEwO30jc2VhcmNoSW5wdXQge3dpZHRoOjEwMCU7cGFkZGluZzoxNnB4IDMwcHg7Ym9yZGVyLXJhZGl1czo1MHB4O2JvcmRlcjoxcHggc29saWQgI2U1MDkxNDtiYWNrZ3JvdW5kOiMxMTE7Y29sb3I6I2ZmZjtvdXRsaW5lOm5vbmU7Ym94LXNoYWRvdzowIDEwcHggMzBweCAjMDAwO30ucGxheWVyLWNvbnRhaW5lciB7bWF4LXdpZHRoOjkwMHB4O21hcmdpbjo0MHB4IGF1dG87Ym9yZGVyOjFweCBzb2xpZCAjMjIyO2JvcmRlci1yYWRpdXM6MjBweDtvdmVyZmxvdzpoaWRkZW47Ym94LXNoYWRvdzowIDAgNDBweCByZ2JhKDIyOSw5LDIwLDAuMSk7cG9zaXRpb246cmVsYXRpdmU7fXZpZGVvIHt3aWR0aDoxMDAlO2FzcGVjdC1yYXRpbzoxNi85O2JhY2tncm91bmQ6IzAwMDtkaXNwbGF5OmJsb2NrO30jc3R5bGlzaC1sb2FkZXIge3Bvc2l0aW9uOmFic29sdXRlO2luc2V0OjA7YmFja2dyb3VuZDojMDAwO2Rpc3BsYXk6bm9uZTthbGlnbi1pdGVtczpjZW50ZXI7anVzdGlmeS1jb250ZW50OmNlbnRlcjtmb250LWZhbWlseTonUmlnaHRlb3VzJztjb2xvcjojZTUwOTE0O2ZvbnQtc2l6ZToyNHB4O2xldHRlci1zcGFjaW5nOjVweDthbmltYXRpb246Zmxhc2ggMS41cyBpbmZpbml0ZTt6LWluZGV4OjU7fUBrZXlmcmFrZXMgZmxhc2ggezUwJSB7b3BhY2l0eTowLjI7fX0udGFicy1iYXIge2Rpc3BsYXk6ZmxleDtnYXA6MTBweDtwYWRkaW5nOjIwcHg7b3ZlcmZsb3cteDphdXRvO2p1c3RpZnktY29udGVudDpjZW50ZXI7c2Nyb2xsYmFyLXdpZHRoOm5vbmU7fS50YWIge3BhZGRpbmc6MTBweCAyNXB4O2JhY2tncm91bmQ6IzExMTtib3JkZXI6MXB4IHNvbGlkICMyMjI7Ym9yZGVyLXJhZGl1czoxMnB4O2N1cnNvcjpwb2ludGVyO2NvbG9yOiM3Nzc7Zm9udC13ZWlnaHQ6NjAwO3doaXRlLXNwYWNlOm5vd3JhcDt9LnRhYi5hY3RpdmUge2JhY2tncm91bmQ6I2U1MDkxNDtjb2xvcjojZmZmO2JvcmRlci1jb2xvcjojZTUwOTE0O2JveC1zaGFkb3c6MCA1cHggMTVweCByZ2JhKDIyOSw5LDIwLDAuNCk7fS5ncmlkLWxheW91dCB7ZGlzcGxheTpncmlkO2dyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoYXV0by1maWxsLG1pbm1heCgxNDBweCwxZnIpKTtnYXA6MTVweDtwYWRkaW5nOjIwcHg7bWF4LXdpZHRoOjExMDBweDttYXJnaW46YXV0bzt9LmNhcmQge2JhY2tncm91bmQ6IzExMTtiYWNrZ3JvdW5kOiByZ2JhKDIwLDIwLDIwLDAuOCk7cGFkZGluZzoyNXB4IDEwcHg7Ym9yZGVyLXJhZGl1czoyMHB4O3RleHQtYWxpZ246Y2VudGVyO2JvcmRlcjoxcHggc29saWQgIzFhMWExYTtjdXJzb3I6cG9pbnRlcjt0cmFuc2l0aW9uOjAuNHM7fS5jYXJkOmhvdmVyIHtib3JkZXItY29sb3I6I2U1MDkxNDt0cmFuc2Zvcm06dHJhbnNsYXRlWSgtOHB4KTtiYWNrZ3JvdW5kOiMxYTAwMDA7fS5jYXJkIGkge2NvbG9yOiNlNTA5MTQ7Zm9udC1zaXplOjI4cHg7bWFyZ2luLWJvdHRvbToxMnB4O2Rpc3BsYXk6YmxvY2s7fS5kb3Qge3Bvc2l0aW9uOmFic29sdXRlO2JhY2tncm91bmQ6I2ZmZjtib3JkZXItcmFkaXVzOjUwJTtvcGFjaXR5OjAuMjthbmltYXRpb246cmlzZSA0cyBpbmZpbml0ZSBsaW5lYXI7fUBrZXlmcmFrZXMgcmlzZSB7ZnJvbSB7dHJhbnNmb3JtOnRyYW5zbGF0ZVkoMTEwdmgpO30gdG8ge3RyYW5zZm9ybTp0cmFuc2xhdGVZKC0xMHZoKTt9fSMtYXctYmFkZ2Uge3Bvc2l0aW9uOmZpeGVkO2JvdHRvbToxNXB4O2xlZnQ6MTVweDtiYWNrZ3JvdW5kOiMwMDA7Y29sb3I6cmVkO3BhZGRpbmc6NXB4IDEycHg7Ym9yZGVyOjFweCBzb2xpZCAjMzMzO2ZvbnQtc2l6ZToxMXB4O2ZvbnQtd2VpZ2h0OjgwMDtib3JkZXItcmFkaXVzOjVweDt6LWluZGV4Ojk5OTk5O2JveC1zaGFkb3c6MCAwIDhweCByZWQ7fQ==";
+    // --- POISON CSS (Encrypted Base64) ---
+    // Is CSS ko humne JavaScript ke sabse top par load kiya hai
+    const _0x_style = "Ym9keXtiYWNrZ3JvdW5kOiMwMDA7Y29sb3I6I2ZmZjtmb250LWZhbWlseTonUG9wcGlucyosc2Fucy1zZXJpZjttYXJnaW46MDt0ZXh0LWFsaWduOmNlbnRlcjt9Lmhlcm8tcG9zdGVye3BhZGRpbmc6NTBweCAyMHB4O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KHRvIGJvdHRvbSxyZ2JhKDAsMCwwLDAuOCksIzAwMCksdXJsKCdodHRwczovL2ltYWdlcy51bnNwbGFzaC5jb20vcGhvdG8tMTUwNDQ1MDNzODQ4MS03MzM4ZWJhNzUyNGEnKTtiYWNrZ3JvdW5kLXNpemU6Y292ZXI7YmFja2dyb3VuZC1wb3NpdGlvbjpjZW50ZXI7fS5tYWluLXRpdGxlIHtmb250LWZhbWlseTonUmlnaHRlb3VzJztjb2xvcjojZTUwOTE0O2ZvbnQtc2l6ZTo2MHB4O21hcmdpbjowO3RleHQtc2hhZG93OjAgMCAyMHB4IHJnYmEoMjI5LDksMjAsMC42KTt9LnNlYXJjaC1ib3h7d2lkdGg6OTAlO21heC13aWR0aDo1MHB4O21hcmdpbjotMzBweCBhdXRvIDAgYXV0bztwb3NpdGlvbjpyZWxhdGl2ZTt6LWluZGV4OjEwO30jc2VhcmNoSW5wdXQge3dpZHRoOjEwMCU7cGFkZGluZzoxNnB4IDMwcHg7Ym9yZGVyLXJhZGl1czo1MHB4O2JvcmRlcjoxcHggc29saWQgI2U1MDkxNDtiYWNrZ3JvdW5kOiMxMTE7Y29sb3I6I2ZmZjtvdXRsaW5lOm5vbmU7Ym94LXNoYWRvdzowIDEwcHggMzBweCAjMDAwO30ucGxheWVyLWNvbnRhaW5lciB7bWF4LXdpZHRoOjkwMHB4O21hcmdpbjo0MHB4IGF1dG87Ym9yZGVyOjFweCBzb2xpZCAjMjIyO2JvcmRlci1yYWRpdXM6MjBweDtvdmVyZmxvdzpoaWRkZW47Ym94LXNoYWRvdzowIDAgNDBweCByZ2JhKDIyOSw5LDIwLDAuMSk7cG9zaXRpb246cmVsYXRpdmU7fXZpZGVvIHt3aWR0aDoxMDAlO2FzcGVjdC1yYXRpbzoxNi85O2JhY2tncm91bmQ6IzAwMDtkaXNwbGF5OmJsb2NrO30jbG9hZGluZy1vdmVybGF5IHtwb3NpdGlvbjphYnNvbHV0ZTtpbnNldDowO2JhY2tncm91bmQ6IzAwMDtkaXNwbGF5Om5vbmU7YWxpZ24taXRlbXM6Y2VudGVyO2p1c3RpZnktY29udGVudDpjZW50ZXI7Zm9udC1mYW1pbHk6J1JpZ2h0ZW91cyc7Y29sb3I6I2U1MDkxNDtmb250LXNpemU6MjRweDtsZXR0ZXItc3BhY2luZzo1cHg7YW5pbWF0aW9uOmZsYXNoIDEuNXMgaW5maW5pdGU7ei1pbmRleDo1O31Aa2V5ZnJhbWVzIGZsYXNoIHs1MCUge29wYWNpdHk6MC4yO319LnRhYnMtbmF2IHtkaXNwbGF5OmZsZXg7Z2FwOjEwcHg7cGFkZGluZzoyMHB4O292ZXJmbG93LXg6YXV0bztqdXN0aWZ5LWNvbnRlbnQ6Y2VudGVyO3Njcm9sbGJhci13aWR0aDpub25lO30udGFiIHtwYWRkaW5nOjEwcHggMjVweDtiYWNrZ3JvdW5kOiMxMTE7Ym9yZGVyOjFweCBzb2xpZCAjMjIyO2JvcmRlci1yYWRpdXM6MTJweDtjdXJzb3I6cG9pbnRlcjtjb2xvcjojNzc3O2ZvbnQtd2VpZ2h0OjYwMDt3aGl0ZS1zcGFjZTpub3dyYXA7fS50YWIuYWN0aXZlIHtiYWNrZ3JvdW5kOiNlNTA5MTQ7Y29sb3I6I2ZmZjtib3JkZXItY29sb3I6I2U1MDkxNDtib3gtc2hhZG93OjAgNXB4IDE1cHggcmdiYSgyMjksOSwyMCwwLjQpO30uZ3JpZC12aWV3IHtkaXNwbGF5OmdyaWQ7Z2FyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoYXV0by1maWxsLG1pbm1heCgxNDBweCwxZnIpKTtnYXA6MTVweDtwYWRkaW5nOjIwcHg7bWF4LXdpZHRoOjExMDBweDttYXJnaW46YXV0bzt9LmNhcmQge2JhY2tncm91bmQ6IzExMTtiYWNrZ3JvdW5kOiByZ2JhKDIwLDIwLDIwLDAuOCk7cGFkZGluZzoyNXB4IDEwcHg7Ym9yZGVyLXJhZGl1czoyMHB4O3RleHQtYWxpZ246Y2VudGVyO2JvcmRlcjoxcHggc29saWQgIzFhMWExYTtjdXJzb3I6cG9pbnRlcjt0cmFuc2l0aW9uOjAuNHM7fS5jYXJkOmhvdmVyIHtib3JkZXItY29sb3I6I2U1MDkxNDt0cmFuc2Zvcm06dHJhbnNsYXRlWSgtOHB4KTtiYWNrZ3JvdW5kOiMxYTAwMDA7fS5jYXJkIGkge2NvbG9yOiNlNTA5MTQ7Zm9udC1zaXplOjI4cHg7bWFyZ2luLWJvdHRvbToxMnB4O2Rpc3BsYXk6YmxvY2s7fS5kb3Qge3Bvc2l0aW9uOmFic29sdXRlO2JhY2tncm91bmQ6I2ZmZjtib3JkZXItcmFkaXVzOjUwJTtvcGFjaXR5OjAuMjthbmltYXRpb246cmlzZSA0cyBpbmZpbml0ZSBsaW5lYXI7fUBrZXlmcmFrZXMgcmlzZSB7ZnJvbSB7dHJhbnNmb3JtOnRyYW5zbGF0ZVkoMTEwdmgpO30gdG8ge3RyYW5zZm9ybTp0cmFuc2xhdGVZKC0xMHZoKTt9fSMtYXctYmFkZ2Uge3Bvc2l0aW9uOmZpeGVkO2JvdHRvbToxNXB4O2xlZnQ6MTVweDtiYWNrZ3JvdW5kOiMwMDA7Y29sb3I6cmVkO3BhZGRpbmc6NXB4IDEycHg7Ym9yZGVyOjFweCBzb2xpZCAjMzMzO2ZvbnQtc2l6ZToxMXB4O2ZvbnQtd2VpZ2h0OjgwMDtib3JkZXItcmFkaXVzOjVweDt6LWluZGV4Ojk5OTk5O2JveC1zaGFkb3c6MCAwIDhweCByZWQ7fQ==";
 
-    document.getElementById("poison-css").innerHTML = atob(_0x_design);
+    // --- IMMEDIATE DESIGN INJECTION ---
+    document.getElementById("dilse-css").innerHTML = atob(_0x_style);
 
     const video = document.getElementById("player");
-    const loader = document.getElementById("stylish-loader");
+    const loader = document.getElementById("loading-overlay");
     const grid = document.getElementById("channelGrid");
-    const search = document.getElementById("searchInput");
+    const searchInput = document.getElementById("searchInput");
+    
     let allData = [];
     let activeCat = "Sports";
     let hls = null;
 
-    // BRANDING INJECTION
+    // --- BRANDING ---
     const b = document.createElement('div'); b.id='-aw-badge'; b.innerHTML="AWAIS HAIDER | +994401879953"; document.body.appendChild(b);
 
     async function init() {
         makeSparkles();
-        grid.innerHTML = "<p style='grid-column:1/-1; padding:100px; color:#444;'>Securing Connection...</p>";
+        grid.innerHTML = "<p style='grid-column:1/-1; padding:50px; color:#555;'>Loading Secure UI & Channels...</p>";
         try {
             const res = await fetch('/api/getChannels');
             allData = await res.json();
             loadCategory("Sports");
         } catch (e) {
-            grid.innerHTML = "<p style='color:red; grid-column:1/-1;'>API Error: Access Blocked.</p>";
+            grid.innerHTML = "<p style='color:red; grid-column:1/-1;'>API Error: Connection Blocked.</p>";
         }
     }
 
     function loadCategory(cat) {
         activeCat = cat;
-        // Search & Group filtering (case sensitive match)
         const filtered = allData.filter(c => c.group === cat);
         render(filtered);
     }
@@ -84,13 +83,13 @@
     function render(list) {
         grid.innerHTML = "";
         if (list.length === 0) {
-            grid.innerHTML = "<p style='grid-column:1/-1; padding:50px; color:gray;'>No Channels Found in this Category.</p>";
+            grid.innerHTML = "<p style='grid-column:1/-1; padding:50px; color:gray;'>No Channels Found.</p>";
             return;
         }
         list.forEach(ch => {
             const card = document.createElement("div");
             card.className = "card";
-            card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
+            card.innerHTML = `<i class="fa-solid fa-circle-play"></i><span>${ch.name}</span>`;
             card.onclick = () => {
                 loader.style.display = "flex";
                 window.scrollTo({ top: 380, behavior: 'smooth' });
@@ -104,7 +103,7 @@
         });
     }
 
-    search.oninput = (e) => {
+    searchInput.oninput = (e) => {
         const val = e.target.value.toLowerCase();
         const filtered = allData.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
         render(filtered);
@@ -118,7 +117,7 @@
         };
     });
 
-    document.getElementById("footer-section").innerHTML = `
+    document.getElementById("footer").innerHTML = `
         <footer style="padding:80px 20px; border-top:1px solid #111; margin-top:50px; background:#000;">
             <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" style="background:#25d366;color:#000;padding:15px 40px;border-radius:50px;text-decoration:none;font-weight:800;display:inline-block;margin-bottom:30px;">JOIN WHATSAPP CHANNEL</a>
             <p style="font-size:11px; color:#333; letter-spacing:2px;">© 2024 DILSE TV OFFICIAL • PREMIER STREAMING<br><b style="color:#fff; font-size:14px;">DEVELOPED BY AWAI S HAIDER</b><br><span style="color:red">+994401879953</span></p>
@@ -126,7 +125,7 @@
     `;
 
     function makeSparkles() {
-        const c = document.getElementById('sparkle-wrap');
+        const c = document.getElementById('sparkle-container');
         for(let i=0; i<40; i++) {
             let s = document.createElement('div'); s.className = 'dot';
             s.style.left = Math.random()*100+'%'; s.style.width = s.style.height = Math.random()*3+'px';
@@ -134,6 +133,7 @@
         }
     }
 
+    // Protection Check
     setInterval(() => {
         if(!document.getElementById('-aw-badge')) document.body.innerHTML = "LICENSE ERROR";
     }, 2500);
