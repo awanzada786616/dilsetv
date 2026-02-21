@@ -1,65 +1,60 @@
 const crypto = require('crypto');
 const axios = require('axios');
 
-const K = "dilse-tv-premium-key-secure-32ch"; 
+const K = "dilse-tv-premium-key-secure-32ch"; // 32 chars
 
-// Shaheen TV Style Parsing Method
 async function fetchM3U(url, group) {
     try {
-        const res = await axios.get(url, { timeout: 7000 });
-        const text = res.data;
-        const lines = text.split("\n");
+        const res = await axios.get(url, { timeout: 6000 });
+        const lines = res.data.split('\n');
         let channels = [];
-        
-        for (let i = 0; i < lines.length; i++) {
-            if (lines[i].startsWith("#EXTINF")) {
-                // Shaheen TV method: extract name after comma
-                const namePart = lines[i].split(",")[1];
-                const name = namePart ? namePart.trim() : "Unknown Channel";
-                const stream = lines[i + 1] ? lines[i + 1].trim() : null;
-                
+        for (let i = 0; i < lines.length && channels.length < 50; i++) {
+            if (lines[i].includes("#EXTINF")) {
+                const name = lines[i].split(",")[1]?.trim() || "Live TV";
+                const stream = lines[i + 1]?.trim();
                 if (stream && stream.startsWith("http")) {
                     channels.push({ name, url: stream, group });
                 }
             }
-            if (channels.length >= 60) break; // Speed limit
         }
         return channels;
     } catch (e) { return []; }
 }
 
 export default async function handler(req, res) {
+    // Security: Only allow your vercel domain
     const referer = req.headers.referer || "";
-    if (!referer.includes('vercel.app') && !referer.includes('localhost')) {
+    if (!referer.includes('vercel.app') && !referer.includes('localhost') && referer !== "") {
         return res.status(403).json({ error: "Access Denied" });
     }
 
     try {
-        // API Links (Shaheen TV sources + Your JSON)
-        const M3U_Kids = "https://iptv-org.github.io/iptv/categories/kids.m3u";
-        const M3U_IN = "https://iptv-org.github.io/iptv/countries/in.m3u";
-        const M3U_SPORTS = "https://iptv-org.github.io/iptv/categories/sports.m3u";
-        const MY_JSON = "https://api.jsonbin.io/v3/b/699204d8ae596e708f2d1de2/latest";
+        // 1. Static Channels (Ye hamesha show honge)
+        let allChannels = [
+            { name: "PTV Sports HD", url: "https://m-c16-n.top-streaming.com/ptv/ptvsports/playlist.m3u8", group: "Sports" },
+            { name: "Ten Sports HD", url: "https://m-c16-n.top-streaming.com/ten/tensports/playlist.m3u8", group: "Sports" },
+            { name: "Geo Super", url: "https://m-c16-n.top-streaming.com/geo/geosuper/playlist.m3u8", group: "Sports" }
+        ];
 
-        const mainRes = await axios.get(MY_JSON);
-        let allChannels = mainRes.data.record.channels || [];
-
-        // Parallel Fetching like Shaheen TV
-        const [kids, india, sports] = await Promise.all([
-            fetchM3U(M3U_Kids, "Kids"),
-            fetchM3U(M3U_IN, "India"),
-            fetchM3U(M3U_SPORTS, "Global")
+        // 2. Parallel Fetching
+        const [kids, india, global] = await Promise.all([
+            fetchM3U("https://iptv-org.github.io/iptv/categories/kids.m3u", "Kids"),
+            fetchM3U("https://iptv-org.github.io/iptv/countries/in.m3u", "India"),
+            fetchM3U("https://iptv-org.github.io/iptv/categories/sports.m3u", "Global")
         ]);
 
-        allChannels = [...allChannels, ...kids, ...india, ...sports];
+        allChannels = [...allChannels, ...kids, ...india, ...global];
 
-        // AES Encryption
+        // 3. Encryption
         const iv = crypto.randomBytes(16);
         const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(K), iv);
         let encrypted = cipher.update(JSON.stringify(allChannels), 'utf8', 'hex');
         encrypted += cipher.final('hex');
 
-        res.status(200).json({ d: encrypted, i: iv.toString('hex') });
+        res.status(200).json({
+            d: encrypted,
+            i: iv.toString('hex')
+        });
     } catch (error) {
         res.status(500).json({ error: "Server Error" });
     }
