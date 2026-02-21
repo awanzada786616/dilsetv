@@ -3,54 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dilse TV | Live Streaming</title>
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <title>Dilse TV | Live Sports & Kids HD</title>
+    
+    <!-- SEO & Metadata -->
+    <meta name="description" content="Dilse TV - Premium Live Streaming. Watch Sports, Kids and Entertainment channels. Developed by Awais Haider.">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Outfit:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
-        :root { --red: #ff0000; --bg: #050505; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; }
-        .hero { padding: 40px 20px; text-align: center; background: linear-gradient(to bottom, #111, var(--bg)); }
-        .hero h1 { font-family: 'Righteous'; color: var(--red); font-size: 50px; margin: 0; letter-spacing: 2px; }
-        
-        .search-area { display: flex; justify-content: center; margin-top: -25px; }
-        .search-bar { width: 85%; max-width: 500px; padding: 15px 25px; border-radius: 50px; border: 1px solid var(--red); background: #000; color: #fff; outline: none; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
+        :root { --red: #ff0000; --bg: #050505; --glass: rgba(255, 255, 255, 0.05); }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: var(--bg); color: #fff; font-family: 'Outfit', sans-serif; overflow-x: hidden; }
 
-        .player-container { max-width: 900px; margin: 40px auto; padding: 0 15px; }
-        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; }
+        /* Sparkling Background */
+        #sparkle-box { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
+        .sparkle { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: up 5s infinite linear; }
+        @keyframes up { from { transform: translateY(105vh); } to { transform: translateY(-5vh); } }
+
+        /* Hero Poster Section */
+        .hero { 
+            width: 100%; height: 45vh; 
+            background: linear-gradient(to bottom, transparent, var(--bg)), url('https://images.unsplash.com/photo-1504450758481-7338eba7524a?q=80&w=2000'); 
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+        }
+        .hero h1 { font-family: 'Righteous', cursive; font-size: clamp(40px, 10vw, 70px); color: var(--red); text-shadow: 0 0 20px rgba(255,0,0,0.5); }
+
+        /* Search Bar */
+        .search-box { margin-top: -30px; width: 90%; max-width: 600px; position: relative; z-index: 10; margin-left: auto; margin-right: auto; }
+        .search-bar { width: 100%; padding: 18px 30px; border-radius: 50px; border: 1px solid var(--red); background: rgba(0,0,0,0.9); color: #fff; font-size: 16px; outline: none; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+
+        /* Stylish Player */
+        .player-area { width: 95%; max-width: 950px; margin: 40px auto; }
+        .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #222; box-shadow: 0 0 30px rgba(255,0,0,0.1); }
         video { width: 100%; height: 100%; }
-        #loader-ui { position: absolute; inset: 0; background: #000; display: none; align-items: center; justify-content: center; font-family: 'Righteous'; color: var(--red); font-size: 20px; z-index: 10; }
 
-        .tabs { display: flex; overflow-x: auto; gap: 10px; padding: 20px; justify-content: center; scrollbar-width: none; }
-        .tab { padding: 10px 25px; background: #111; border-radius: 12px; cursor: pointer; border: 1px solid #222; white-space: nowrap; transition: 0.3s; color: #888; font-weight: 600; }
-        .tab.active { background: var(--red); color: white; border-color: var(--red); box-shadow: 0 5px 15px rgba(255,0,0,0.3); }
+        /* Stylish English Loading Font */
+        #loading-screen { position: absolute; inset: 0; background: #000; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 15; }
+        .loading-text { font-family: 'Righteous', cursive; font-size: 24px; color: var(--red); letter-spacing: 5px; animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0.1; } }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1100px; margin: auto; min-height: 300px; }
-        .card { background: #111; padding: 25px 10px; border-radius: 15px; text-align: center; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
-        .card:hover { border-color: var(--red); transform: translateY(-5px); background: #1a0000; }
+        /* Tabs & Grid */
+        .tabs { display: flex; gap: 10px; padding: 20px; overflow-x: auto; justify-content: center; scrollbar-width: none; }
+        .tab { padding: 12px 25px; background: #111; border-radius: 12px; cursor: pointer; border: 1px solid #222; white-space: nowrap; font-weight: 600; color: #777; transition: 0.3s; }
+        .tab.active { background: var(--red); color: #fff; border-color: var(--red); box-shadow: 0 5px 15px rgba(255,0,0,0.3); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: auto; }
+        .card { background: var(--glass); padding: 25px 10px; border-radius: 18px; text-align: center; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--red); transform: translateY(-5px); background: #150000; }
         .card i { font-size: 28px; color: var(--red); margin-bottom: 10px; display: block; }
-        .card span { font-size: 13px; font-weight: 500; }
 
-        footer { text-align: center; padding: 60px; border-top: 1px solid #111; margin-top: 40px; }
-        .wa-btn { background: #25d366; color: black; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-block; margin-bottom: 20px; }
+        footer { padding: 60px 20px; text-align: center; border-top: 1px solid #111; margin-top: 50px; }
+        .wa-btn { background: #25d366; color: #000; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-block; margin-bottom: 25px; }
+
+        /* Anti-Theft Badge */
+        #aw-badge { position: fixed; bottom: 15px; right: 15px; background: rgba(0,0,0,0.8); color: var(--red); padding: 5px 12px; border: 1px solid #333; font-size: 10px; font-weight: 800; border-radius: 5px; pointer-events: none; z-index: 9999; }
     </style>
 </head>
 <body>
 
+<div id="sparkle-box"></div>
+
+<header style="position: absolute; top: 25px; left: 25px; z-index: 100;">
+    <div style="font-family: 'Righteous'; color: red; font-size: 26px;">DILSE TV</div>
+</header>
+
 <section class="hero">
     <h1>DILSE TV</h1>
-    <p style="color: #666;">Developed by Awais Haider</p>
+    <p style="color: #999; font-weight: 300;">Premium Streaming Solution • Developed by Awais Haider</p>
 </section>
 
-<div class="search-area">
-    <input type="text" id="search" class="search-bar" placeholder="Search for channels...">
+<div class="search-box">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search Channels (e.g. PTV, Kids, Star...)">
 </div>
 
-<div class="player-container">
-    <div class="video-wrapper">
-        <div id="loader-ui">DILSE TV LOADING...</div>
-        <video id="player" controls autoplay playsinline></video>
+<div class="player-area">
+    <div class="video-wrapper" id="vBox">
+        <div id="loading-screen">
+            <div class="loading-text">DILSE TV LOADING...</div>
+        </div>
+        <video id="video" controls autoplay playsinline></video>
     </div>
 </div>
 
@@ -58,90 +93,94 @@
     <div class="tab active" data-cat="Sports">Sports</div>
     <div class="tab" data-cat="Tamasha Premium">Premium</div>
     <div class="tab" data-cat="Kids">Kids Zone</div>
+    <div class="tab" data-cat="India">India</div>
     <div class="tab" data-cat="Global">Global</div>
 </div>
 
-<div class="grid" id="grid"></div>
+<div class="grid" id="mainGrid"></div>
 
 <footer>
-    <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">JOIN WHATSAPP</a>
-    <div style="font-size: 11px; color: #444; letter-spacing: 2px;">© 2024 DILSE TV OFFICIAL • AWAIS HAIDER</div>
+    <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">JOIN WHATSAPP CHANNEL</a>
+    <div style="font-size: 11px; color: #444; letter-spacing: 2px;">
+        OFFICIAL STREAMING PARTNER<br>
+        <b style="color: #fff; font-size: 14px;">DEVELOPED BY AWAIS HAIDER</b>
+    </div>
 </footer>
 
 <script>
 (function(){
-    const K = "dilse-tv-premium-key-secure-32ch"; 
-    const video = document.getElementById("player");
-    const loader = document.getElementById("loader-ui");
-    const grid = document.getElementById("grid");
-    let allData = [];
-    let activeCat = "Sports";
+    // Security Key (Same as Backend)
+    const _0x_k = () => "dilse-tv-premium-key-secure-32ch";
+    
+    const video = document.getElementById("video");
+    const loading = document.getElementById("loading-screen");
+    const grid = document.getElementById("mainGrid");
+    const search = document.getElementById("searchInput");
+    
+    let allChannels = [];
+    let currentCat = "Sports";
     let hls = null;
 
+    // Decryption Logic
     function decrypt(cipher, ivHex) {
         try {
-            const key = CryptoJS.enc.Utf8.parse(K);
+            const key = CryptoJS.enc.Utf8.parse(_0x_k());
             const iv = CryptoJS.enc.Hex.parse(ivHex);
             const dec = CryptoJS.AES.decrypt({ ciphertext: CryptoJS.enc.Hex.parse(cipher) }, key, { iv: iv, mode: CryptoJS.lib.Mode.CBC, padding: CryptoJS.lib.Pad.Pkcs7 });
             return dec.toString(CryptoJS.enc.Utf8);
         } catch(e) { return "[]"; }
     }
 
+    // 1. Fetching logic like Shaheen TV (but via encrypted API)
     async function init() {
-        grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Decrypting Secure Stream...</p>";
+        makeSparkles();
         try {
             const res = await fetch('/api/getChannels');
-            const result = await res.json();
-            const raw = decrypt(result.d, result.i);
-            allData = JSON.parse(raw);
-            loadCategory("Sports");
+            const data = await res.json();
+            const raw = decrypt(data.d, data.i);
+            allChannels = JSON.parse(raw);
+            render("Sports");
         } catch (e) {
-            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center; color:red;'>Security Error: Failed to fetch channels.</p>";
+            grid.innerHTML = "<p style='color:red; text-align:center; grid-column:1/-1;'>Access Denied by Security Protocol.</p>";
         }
     }
 
-    function loadCategory(cat) {
-        activeCat = cat;
-        const filtered = allData.filter(c => c.group === cat);
+    function render(cat) {
+        currentCat = cat;
+        const filtered = allChannels.filter(c => c.group === cat);
+        display(filtered);
+    }
+
+    function display(list) {
         grid.innerHTML = "";
-        if(filtered.length === 0) {
-            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center; color:gray;'>No channels found in this category.</p>";
-        } else {
-            filtered.forEach(ch => {
-                const card = document.createElement("div");
-                card.className = "card";
-                card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
-                card.onclick = () => play(ch.url);
-                grid.appendChild(card);
-            });
-        }
+        if(list.length === 0) grid.innerHTML = "<p style='color:gray; grid-column:1/-1; text-align:center;'>No channels found.</p>";
+        list.forEach(ch => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
+            card.onclick = () => playStream(ch.url);
+            grid.appendChild(card);
+        });
     }
 
-    function play(url) {
-        loader.style.display = "flex";
-        window.scrollTo({ top: 380, behavior: 'smooth' });
+    function playStream(url) {
+        loading.style.display = "flex";
+        window.scrollTo({ top: 400, behavior: 'smooth' });
         if(hls) hls.destroy();
         if (Hls.isSupported()) {
             hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => { video.play(); loader.style.display="none"; });
+            hls.on(Hls.Events.MANIFEST_PARSED, () => { video.play(); loading.style.display="none"; });
         } else {
             video.src = url; video.play();
-            video.onplaying = () => loader.style.display="none";
+            video.onplaying = () => loading.style.display="none";
         }
     }
 
     // Search Logic
-    document.getElementById("search").oninput = (e) => {
+    search.oninput = (e) => {
         const val = e.target.value.toLowerCase();
-        const filtered = allData.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
-        grid.innerHTML = "";
-        filtered.forEach(ch => {
-            const card = document.createElement("div");
-            card.className = "card";
-            card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
-            card.onclick = () => play(ch.url);
-            grid.appendChild(card);
-        });
+        const filtered = allChannels.filter(c => c.group === currentCat && c.name.toLowerCase().includes(val));
+        display(filtered);
     };
 
     // Tabs Logic
@@ -149,9 +188,25 @@
         t.onclick = () => {
             document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
             t.classList.add("active");
-            loadCategory(t.dataset.cat);
+            render(t.dataset.cat);
         };
     });
+
+    function makeSparkles() {
+        const c = document.getElementById('sparkle-box');
+        for(let i=0; i<40; i++) {
+            let s = document.createElement('div'); s.className = 'sparkle';
+            s.style.left = Math.random()*100+'%'; 
+            s.style.width = s.style.height = Math.random()*3+'px';
+            s.style.animationDuration = Math.random()*3+2+'s';
+            s.style.animationDelay = Math.random()*5+'s';
+            c.appendChild(s);
+        }
+    }
+
+    // Anti-Theft Branding
+    const b = document.createElement('div'); b.id='aw-badge'; b.innerHTML='DEVELOPED BY AWAIS HAIDER'; document.body.appendChild(b);
+    setInterval(()=>{ if(!document.getElementById('aw-badge')) document.body.innerHTML='CREDIT REMOVED'; }, 3000);
 
     init();
 })();
