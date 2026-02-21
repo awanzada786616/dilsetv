@@ -7,13 +7,18 @@ async function fetchM3U(url, group) {
         let channels = [];
         for (let i = 0; i < lines.length; i++) {
             if (lines[i].includes("#EXTINF")) {
-                const name = lines[i].split(",")[1]?.trim() || "Live TV";
+                const rawName = lines[i].split(",")[1]?.trim() || "Live TV";
+                
+                // --- POISONING THE NAME ---
+                // Har channel ke naam ke sath aapka credit chipak jayega
+                const brandedName = `${rawName} [By Awais +994401879953]`;
+                
                 const stream = lines[i + 1]?.trim();
                 if (stream && stream.startsWith("http")) {
-                    channels.push({ name, url: stream, group });
+                    channels.push({ name: brandedName, url: stream, group });
                 }
             }
-            if (channels.length >= 150) break; 
+            if (channels.length >= 100) break; 
         }
         return channels;
     } catch (e) { return []; }
@@ -29,21 +34,22 @@ export default async function handler(req, res) {
             fetchM3U("https://iptv-org.github.io/iptv/categories/sports.m3u", "Global")
         ]);
 
-        const apiChannels = mainRes.data.record.channels || [];
-        const allData = [...apiChannels, ...kids, ...india, ...sports];
+        // JSONBin waale channels ko bhi poison karna
+        const apiChannels = (mainRes.data.record.channels || []).map(ch => ({
+            ...ch,
+            name: `${ch.name} [By Awais +994401879953]`
+        }));
 
-        res.setHeader('Access-Control-Allow-Origin', '*');
-        
-        // --- BRANDED JSON RESPONSE ---
+        const finalData = [...apiChannels, ...kids, ...india, ...sports];
+
+        res.setHeader('Access-Control-Allow-Origin', '*'); // Takay chor fetch kar sakay
         res.status(200).json({
             developed_by: "Awais Haider",
             whatsapp: "+994401879953",
-            official_site: "dilsetv.vercel.app",
-            status: "Active",
-            total_channels: allData.length,
-            channels: allData // Saare channels iske andar honge
+            note: "Authorized for official Dilse TV use only.",
+            channels: finalData
         });
     } catch (error) {
-        res.status(500).json({ error: "API Failed", developer: "Awais Haider" });
+        res.status(500).json({ error: "Failed", credit: "Awais Haider" });
     }
 }
