@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer-when-downgrade">
     <title>Dilse TV | Live Streaming by Awais Haider</title>
-    <meta name="description" content="Dilse TV - Premium Live Sports, Kids & International Channels. Developed by Awais Haider.">
+    
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -15,75 +16,58 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
         body { background-color: var(--bg); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
 
-        /* Sparkling BG */
         #sparkle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
         .dot { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: float 4s infinite linear; }
         @keyframes float { from { transform: translateY(100vh); } to { transform: translateY(-10vh); } }
 
-        /* Hero */
-        .hero { width: 100%; height: 45vh; background: linear-gradient(to bottom, transparent, var(--bg)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .hero h1 { font-family: 'Righteous', cursive; font-size: clamp(40px, 10vw, 70px); color: var(--red); text-shadow: 0 0 20px rgba(255,0,0,0.6); letter-spacing: 2px; }
+        .hero { width: 100%; height: 40vh; background: linear-gradient(to bottom, transparent, var(--bg)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
+        .hero h1 { font-family: 'Righteous', cursive; font-size: clamp(40px, 10vw, 70px); color: var(--red); text-shadow: 0 0 20px rgba(255,0,0,0.6); }
 
-        /* Search */
-        .search-container { margin-top: -30px; width: 90%; max-width: 600px; z-index: 10; position: relative; }
-        .search-bar { width: 100%; padding: 18px 30px; border-radius: 50px; border: 1px solid var(--red); background: rgba(0,0,0,0.9); color: #fff; outline: none; font-size: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .search-container { margin-top: -30px; width: 90%; max-width: 600px; z-index: 10; position: relative; margin-left: auto; margin-right: auto; }
+        .search-bar { width: 100%; padding: 18px 30px; border-radius: 50px; border: 1px solid var(--red); background: rgba(0,0,0,0.9); color: #fff; outline: none; font-size: 16px; }
 
-        /* Player */
         .player-box { width: 95%; max-width: 950px; margin: 40px auto; position: relative; }
-        .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #222; box-shadow: 0 0 50px rgba(255,0,0,0.1); }
+        .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #222; }
         video { width: 100%; height: 100%; }
 
         #vid-loading { position: absolute; inset: 0; background: #000; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 5; }
-        .load-txt { font-family: 'Righteous', cursive; font-size: 24px; color: var(--red); letter-spacing: 5px; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 50% { opacity: 0.2; transform: scale(0.9); } }
+        .load-txt { font-family: 'Righteous', cursive; font-size: 24px; color: var(--red); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 50% { opacity: 0.2; } }
 
-        .v-ui { position: absolute; bottom: 0; width: 100%; padding: 20px; background: linear-gradient(transparent, rgba(0,0,0,0.9)); display: flex; justify-content: space-between; opacity: 0; transition: 0.3s; }
-        .video-wrapper:hover .v-ui { opacity: 1; }
-        .v-btn { background: none; border: none; color: #fff; font-size: 25px; cursor: pointer; transition: 0.2s; }
-        .v-btn:hover { color: var(--red); transform: scale(1.1); }
-
-        /* UI Elements */
         .tabs { display: flex; gap: 10px; padding: 20px; overflow-x: auto; justify-content: center; }
-        .tab { padding: 12px 25px; background: #111; border-radius: 12px; cursor: pointer; font-weight: 600; border: 1px solid #222; white-space: nowrap; transition: 0.3s; color: #888; }
-        .tab.active { background: var(--red); color: #fff; border-color: var(--red); box-shadow: 0 5px 20px rgba(255,0,0,0.3); }
+        .tab { padding: 12px 25px; background: #111; border-radius: 12px; cursor: pointer; border: 1px solid #222; white-space: nowrap; color: #888; }
+        .tab.active { background: var(--red); color: #fff; border-color: var(--red); }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: auto; }
-        .card { background: var(--card); padding: 30px 15px; border-radius: 18px; text-align: center; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.4s; }
-        .card:hover { border-color: var(--red); transform: translateY(-8px); box-shadow: 0 10px 20px rgba(255,0,0,0.1); }
-        .card i { font-size: 30px; color: var(--red); margin-bottom: 12px; display: block; }
-        .card span { font-size: 13px; font-weight: 600; letter-spacing: 0.5px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: auto; min-height: 200px;}
+        .card { background: var(--card); padding: 25px 10px; border-radius: 18px; text-align: center; border: 1px solid #1a1a1a; cursor: pointer; }
+        .card:hover { border-color: var(--red); transform: translateY(-5px); }
+        .card i { font-size: 25px; color: var(--red); margin-bottom: 10px; display: block; }
 
-        footer { padding: 80px 20px; text-align: center; background: #000; border-top: 1px solid #111; }
-        .wa-btn { background: #25d366; color: #000; padding: 14px 40px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-block; margin-bottom: 30px; transition: 0.3s; box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
+        footer { padding: 60px 20px; text-align: center; border-top: 1px solid #111; }
+        .wa-btn { background: #25d366; color: #000; padding: 14px 40px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-block; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <div id="sparkle-canvas"></div>
 
-<header style="position:absolute; top:30px; left:30px; z-index:100;">
-    <div style="font-family:'Righteous'; color:red; font-size:26px; text-shadow: 2px 2px #000;">DILSE TV</div>
+<header style="position:absolute; top:20px; left:20px; z-index:100;">
+    <div style="font-family:'Righteous'; color:red; font-size:24px;">DILSE TV</div>
 </header>
 
 <section class="hero">
     <h1>DILSE TV</h1>
-    <p style="color:#aaa; font-weight:300; letter-spacing:1px;">Premium Live Experience • Developed by Awais Haider</p>
+    <p style="color:#aaa;">Premium Live Experience • Developed by Awais Haider</p>
 </section>
 
-<center>
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-bar" placeholder="Search Channels (e.g. Cricket, News, PTV...)">
-    </div>
-</center>
+<div class="search-container">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search Channels...">
+</div>
 
 <div class="player-box">
     <div class="video-wrapper" id="vContainer">
-        <div id="vid-loading"><div class="load-txt">DILSE TV LOADING...</div></div>
-        <video id="mainPlayer" playsinline></video>
-        <div class="v-ui">
-            <button class="v-btn" id="playPause"><i class="fa-solid fa-play"></i></button>
-            <button class="v-btn" id="fullScr"><i class="fa-solid fa-expand"></i></button>
-        </div>
+        <div id="vid-loading"><div class="load-txt">LOADING...</div></div>
+        <video id="mainPlayer" controls playsinline></video>
     </div>
 </div>
 
@@ -95,75 +79,49 @@
     <div class="tab" data-cat="GlobalSports">Global</div>
 </div>
 
-<div class="grid" id="mainGrid"></div>
+<div class="grid" id="mainGrid">
+    <p style="text-align:center; color:gray; grid-column: 1/-1;">Initializing system...</p>
+</div>
 
 <footer>
-    <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">
-        <i class="fa-brands fa-whatsapp"></i> JOIN WHATSAPP CHANNEL
-    </a>
-    <div style="font-size:11px; color:#333; letter-spacing:3px; text-transform:uppercase;">
-        © 2024 DILSE TV • OFFICIAL STREAMING<br>
-        <b style="color:#666; font-size:14px;">AWAI<span style="color:red">S</span> HAIDER</b>
+    <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">JOIN WHATSAPP CHANNEL</a>
+    <div style="font-size:12px; color:#444;">
+        © 2024 DILSE TV OFFICIAL<br>
+        <b style="color:#fff;">DEVELOPED BY AWAIS HAIDER</b>
     </div>
 </footer>
 
 <script>
 (function(){
-    // SECURITY: Domain Lock
-    if (!window.location.hostname.includes('dilsetv.vercel.app') && !window.location.hostname.includes('localhost')) {
-        document.body.innerHTML = "<div style='background:black; color:red; height:100vh; display:flex; align-items:center; justify-content:center; font-family:Righteous; font-size:2vw;'>UNAUTHORIZED DOMAIN ACCESS!</div>";
-        return;
-    }
-
-    // SECURITY: Logic-based Key Reconstruction (Anti-Scraping)
     const _0x_k = () => {
-        const a = "dilse-tv-";
-        const b = "premium-";
-        const c = "key-se";
-        const d = "cure-32ch";
+        const a = "dilse-tv-"; const b = "premium-"; const c = "key-se"; const d = "cure-32ch";
         return a + b + c + d;
     };
 
-    // ANTI-THEFT: Hidden Branding Injection
     const _c = "I2F3LWJ1bGxldCB7IHBvc2l0aW9uOiBmaXhlZDsgYm90dG9tOiAyMHB4OyByaWdodDogMjBwejsgei1pbmRleDogOTk5OTk5OyBiYWNrZ3JvdW5kOiByZ2JhKDAsMCwwLDAuOSk7IGNvbG9yOiByZWQ7IHBhZGRpbmc6IDhweCAxNXB4OyBib3JkZXItcmFkaXVzOiA1cHg7IGZvbnQtc2l6ZTogMTFweDsgZm9udC13ZWlnaHQ6IDgwMDsgYm9yZGVyOiAxcHggc29saWQgIzIyMjsgcG9pbnRlci1ldmVudHM6IG5vbmU7IHRleHQtdHJhbnNmb3JtOiB1cHBlcmNhc2U7IH0=";
     const _n = "RGV2ZWxvcGVkIGJ5IEF3YWlzIEhhaWRlcg==";
 
     function secureBranding() {
-        const s = document.createElement('style');
-        s.innerHTML = atob(_c);
-        document.head.appendChild(s);
-        const div = document.createElement('div');
-        div.id = 'aw-bullet';
-        div.innerHTML = atob(_n);
-        document.body.appendChild(div);
-
-        setInterval(() => {
-            if (!document.getElementById('aw-bullet')) {
-                document.body.innerHTML = "<h1 style='color:red; text-align:center; padding:100px;'>SYSTEM ERROR: BRANDING TAMPERED!</h1>";
-            }
-        }, 2500);
+        const s = document.createElement('style'); s.innerHTML = atob(_c); document.head.appendChild(s);
+        const div = document.createElement('div'); div.id = 'aw-bullet'; div.innerHTML = atob(_n); document.body.appendChild(div);
+        setInterval(() => { if (!document.getElementById('aw-bullet')) document.body.innerHTML = "SYSTEM ERROR"; }, 3000);
     }
 
     const video = document.getElementById("mainPlayer");
     const loading = document.getElementById("vid-loading");
     const grid = document.getElementById("mainGrid");
     const search = document.getElementById("searchInput");
-    const playPause = document.getElementById("playPause");
-    
     let db = [];
     let activeCat = "Sports";
     let hlsObj = null;
 
-    // Decryption Engine
     function decrypt(cipher, ivHex) {
-        const key = CryptoJS.enc.Utf8.parse(_0x_k());
-        const iv = CryptoJS.enc.Hex.parse(ivHex);
-        const dec = CryptoJS.AES.decrypt(
-            { ciphertext: CryptoJS.enc.Hex.parse(cipher) },
-            key,
-            { iv: iv, mode: CryptoJS.lib.Mode.CBC, padding: CryptoJS.lib.Pad.Pkcs7 }
-        );
-        return dec.toString(CryptoJS.enc.Utf8);
+        try {
+            const key = CryptoJS.enc.Utf8.parse(_0x_k());
+            const iv = CryptoJS.enc.Hex.parse(ivHex);
+            const dec = CryptoJS.AES.decrypt({ ciphertext: CryptoJS.enc.Hex.parse(cipher) }, key, { iv: iv, mode: CryptoJS.lib.Mode.CBC, padding: CryptoJS.lib.Pad.Pkcs7 });
+            return dec.toString(CryptoJS.enc.Utf8);
+        } catch(e) { return "[]"; }
     }
 
     async function init() {
@@ -171,12 +129,13 @@
         sparkleEffect();
         try {
             const res = await fetch('/api/getChannels');
+            if (!res.ok) throw new Error("Security Blocked Request");
             const data = await res.json();
             const raw = decrypt(data.d, data.i);
             db = JSON.parse(raw);
             render("Sports");
         } catch (e) {
-            grid.innerHTML = "<p style='color:red;'>Access Blocked by Security Protocol.</p>";
+            grid.innerHTML = `<p style="color:red; text-align:center; grid-column:1/-1;">Access Error: Please refresh or check connection.</p>`;
         }
     }
 
@@ -188,6 +147,7 @@
 
     function display(list) {
         grid.innerHTML = "";
+        if(list.length === 0) grid.innerHTML = "<p style='color:gray; grid-column:1/-1; text-align:center;'>No channels found.</p>";
         list.forEach(ch => {
             const card = document.createElement("div");
             card.className = "card";
@@ -199,36 +159,17 @@
 
     function play(url) {
         loading.style.display = "flex";
-        window.scrollTo({ top: 400, behavior: 'smooth' });
+        window.scrollTo({ top: 350, behavior: 'smooth' });
         if(hlsObj) hlsObj.destroy();
         if (Hls.isSupported()) {
-            hlsObj = new Hls();
-            hlsObj.loadSource(url);
-            hlsObj.attachMedia(video);
+            hlsObj = new Hls(); hlsObj.loadSource(url); hlsObj.attachMedia(video);
             hlsObj.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-        } else {
-            video.src = url;
-            video.play();
-        }
-        playPause.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        } else { video.src = url; video.play(); }
     }
 
-    // Video Logic
     video.onplaying = () => loading.style.display = "none";
     video.onwaiting = () => loading.style.display = "flex";
 
-    playPause.onclick = () => {
-        if(video.paused) { video.play(); playPause.innerHTML='<i class="fa-solid fa-pause"></i>'; }
-        else { video.pause(); playPause.innerHTML='<i class="fa-solid fa-play"></i>'; }
-    };
-
-    document.getElementById("fullScr").onclick = () => {
-        const el = document.getElementById("vContainer");
-        if(el.requestFullscreen) el.requestFullscreen();
-        else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-    };
-
-    // Search & Tabs Logic
     search.oninput = (e) => {
         const val = e.target.value.toLowerCase();
         const filtered = db.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
@@ -245,14 +186,10 @@
 
     function sparkleEffect() {
         const c = document.getElementById('sparkle-canvas');
-        for(let i=0; i<40; i++) {
-            let s = document.createElement('div');
-            s.className = 'dot';
-            s.style.left = Math.random()*100+'%';
-            s.style.width = s.style.height = Math.random()*3+'px';
-            s.style.animationDuration = Math.random()*3+2+'s';
-            s.style.animationDelay = Math.random()*5+'s';
-            c.appendChild(s);
+        for(let i=0; i<30; i++) {
+            let s = document.createElement('div'); s.className = 'dot';
+            s.style.left = Math.random()*100+'%'; s.style.width = s.style.height = Math.random()*3+'px';
+            s.style.animationDuration = Math.random()*3+2+'s'; c.appendChild(s);
         }
     }
 
