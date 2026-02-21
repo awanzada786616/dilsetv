@@ -3,141 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dilse TV | Live Sports HD</title>
+    <title>Dilse TV | Watch Live HD</title>
+    <meta name="description" content="Dilse TV - Live Sports, Kids and Indian Channels. Developed by Awais Haider.">
     
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
-    <style>
-        :root { --red: #e50914; --bg: #000; --card: #111; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body { background-color: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; overflow-x: hidden; text-align: center; }
-
-        /* Sparkling Background */
-        #sparkles { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-        .dot { position: absolute; background: #fff; border-radius: 50%; opacity: 0.2; animation: float 5s infinite linear; }
-        @keyframes float { from { transform: translateY(105vh); } to { transform: translateY(-5vh); } }
-
-        /* Hero Poster Section */
-        .hero { 
-            width: 100%; height: 42vh; 
-            background: linear-gradient(to bottom, transparent, var(--bg)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000'); 
-            background-size: cover; background-position: center;
-            display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px;
-        }
-        .hero h1 { font-family: 'Righteous', cursive; font-size: clamp(40px, 10vw, 70px); color: var(--red); text-shadow: 0 0 20px rgba(229, 9, 20, 0.6); margin-top: 20px; }
-
-        /* Search Bar */
-        .search-container { margin-top: -30px; width: 90%; max-width: 550px; margin-left: auto; margin-right: auto; position: relative; z-index: 10; }
-        .search-bar { width: 100%; padding: 18px 30px; border-radius: 50px; border: 1px solid var(--red); background: rgba(0,0,0,0.9); color: #fff; font-size: 16px; outline: none; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-
-        /* Video Player */
-        .player-box { width: 95%; max-width: 900px; margin: 40px auto; border: 1px solid #222; border-radius: 20px; overflow: hidden; background: #000; box-shadow: 0 0 30px rgba(229, 9, 20, 0.15); position: relative; }
-        video { width: 100%; aspect-ratio: 16/9; display: block; }
-        
-        #vid-loader { position: absolute; inset: 0; background: #000; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 10; font-family: 'Righteous'; color: var(--red); letter-spacing: 4px; animation: flash 1.5s infinite; }
-        @keyframes flash { 50% { opacity: 0.2; } }
-
-        /* Tabs */
-        .tabs { display: flex; gap: 10px; padding: 20px; overflow-x: auto; justify-content: center; scrollbar-width: none; }
-        .tab { padding: 10px 22px; background: #111; border-radius: 12px; cursor: pointer; border: 1px solid #222; white-space: nowrap; font-weight: 600; color: #777; transition: 0.3s; }
-        .tab.active { background: var(--red); color: #fff; border-color: var(--red); box-shadow: 0 5px 15px rgba(229, 9, 20, 0.4); }
-
-        /* Grid */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: auto; min-height: 300px; }
-        .card { background: #111; padding: 25px 10px; border-radius: 18px; text-align: center; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; }
-        .card:hover { border-color: var(--red); transform: translateY(-5px); background: #1a0000; }
-        .card i { font-size: 26px; color: var(--red); margin-bottom: 10px; display: block; }
-        .card span { font-size: 13px; font-weight: 600; }
-
-        /* Footer */
-        footer { padding: 60px 20px; border-top: 1px solid #111; margin-top: 50px; }
-        .wa-btn { background: #25d366; color: #000; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-block; margin-bottom: 25px; transition: 0.3s; }
-        
-        /* Fixed Poison Branding Badge */
-        #aw-badge { position: fixed; bottom: 15px; left: 15px; background: rgba(0,0,0,0.9); color: red; padding: 6px 15px; border: 1px solid #333; font-size: 11px; font-weight: 800; border-radius: 5px; z-index: 10000; box-shadow: 0 0 10px rgba(255,0,0,0.3); pointer-events: none; }
-    </style>
+    <style id="poison-css">/* Injected by JS */</style>
 </head>
 <body>
 
-<div id="sparkles"></div>
+<div id="sparkle-wrap"></div>
+<header id="top-nav"></header>
 
-<header style="position: absolute; top: 25px; left: 25px; z-index: 100;">
-    <div style="font-family: 'Righteous'; color: #e50914; font-size: 28px;">DILSE TV</div>
-</header>
-
-<section class="hero">
-    <h1>DILSE TV</h1>
-    <p style="color: #666; font-size: 14px;">Premium Live Streaming • Developed by Awais Haider</p>
+<section class="hero-poster">
+    <h1 id="main-title">DILSE TV</h1>
+    <p id="sub-title">Premium HD Streaming Experience</p>
 </section>
 
-<div class="search-container">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Search Channels...">
+<div class="search-wrap">
+    <input type="text" id="searchInput" placeholder="Search Channels (e.g. PTV, Sony, Kids...)">
 </div>
 
-<div class="player-box">
-    <div id="vid-loader">DILSE TV LOADING...</div>
-    <video id="videoPlayer" controls autoplay playsinline></video>
-</div>
-
-<div class="tabs">
-    <div class="tab active" data-cat="Sports">Live Sports</div>
-    <div class="tab" data-cat="Kids Zone">Kids Zone</div>
-    <div class="tab" data-cat="Entertainment">Entertainment</div>
-</div>
-
-<div class="grid" id="mainGrid"></div>
-
-<footer>
-    <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">JOIN WHATSAPP CHANNEL</a>
-    <div style="font-size: 12px; color: #444; letter-spacing: 2px;">
-        OFFICIAL PLATFORM © 2024<br>
-        <b style="color: #fff; font-size: 16px; margin-top: 10px; display: block;">DEVELOPED BY AWAI S HAIDER</b>
-        <span style="color: var(--red); font-weight: bold;">WhatsApp: +994401879953</span>
+<div class="player-container">
+    <div class="video-shell">
+        <div id="stylish-loader">DILSE TV LOADING...</div>
+        <video id="player" controls autoplay playsinline></video>
     </div>
-</footer>
+</div>
+
+<div class="tabs-bar">
+    <div class="tab active" data-cat="Sports">Sports</div>
+    <div class="tab" data-cat="Tamasha Premium">Tamasha</div>
+    <div class="tab" data-cat="Kids">Kids Zone</div>
+    <div class="tab" data-cat="India">India</div>
+    <div class="tab" data-cat="Global">Global</div>
+</div>
+
+<div class="grid-layout" id="channelGrid"></div>
+
+<footer id="footer-section"></footer>
 
 <script>
 (function(){
-    const video = document.getElementById("videoPlayer");
-    const loader = document.getElementById("vid-loader");
-    const grid = document.getElementById("mainGrid");
-    const searchInput = document.getElementById("searchInput");
-    
+    // --- POISON CSS & BRANDING ---
+    const _0x_design = "Ym9keXtiYWNrZ3JvdW5kOiMwMDA7Y29sb3I6I2ZmZjtmb250LWZhbWlseTonUG9wcGlucyosc2Fucy1zZXJpZjttYXJnaW46MDt0ZXh0LWFsaWduOmNlbnRlcjt9Lmhlcm8tcG9zdGVye3BhZGRpbmc6NTBweCAyMHB4O2JhY2tncm91bmQ6bGluZWFyLWdyYWRpZW50KHRvIGJvdHRvbSxyZ2JhKDAsMCwwLDAuOCksIzAwMCksdXJsKCdodHRwczovL2ltYWdlcy51bnNwbGFzaC5jb20vcGhvdG8tMTUwNDQ1MDNzODQ4MS03MzM4ZWJhNzUyNGEnKTtiYWNrZ3JvdW5kLXNpemU6Y292ZXI7YmFja2dyb3VuZC1wb3NpdGlvbjpjZW50ZXI7fSNtYWluLXRpdGxlIHtmb250LWZhbWlseTonUmlnaHRlb3VzJztjb2xvcjojZTUwOTE0O2ZvbnQtc2l6ZTo2MHB4O21hcmdpbjowO3RleHQtc2hhZG93OjAgMCAyMHB4IHJnYmEoMjI5LDksMjAsMC42KTt9LnNlYXJjaC13cmFwIHt3aWR0aDo5MCU7bWF4LXdpZHRoOjU1MHB4O21hcmdpbjotMzBweCBhdXRvIDAgYXV0bztwb3NpdGlvbjpyZWxhdGl2ZTt6LWluZGV4OjEwO30jc2VhcmNoSW5wdXQge3dpZHRoOjEwMCU7cGFkZGluZzoxNnB4IDMwcHg7Ym9yZGVyLXJhZGl1czo1MHB4O2JvcmRlcjoxcHggc29saWQgI2U1MDkxNDtiYWNrZ3JvdW5kOiMxMTE7Y29sb3I6I2ZmZjtvdXRsaW5lOm5vbmU7Ym94LXNoYWRvdzowIDEwcHggMzBweCAjMDAwO30ucGxheWVyLWNvbnRhaW5lciB7bWF4LXdpZHRoOjkwMHB4O21hcmdpbjo0MHB4IGF1dG87Ym9yZGVyOjFweCBzb2xpZCAjMjIyO2JvcmRlci1yYWRpdXM6MjBweDtvdmVyZmxvdzpoaWRkZW47Ym94LXNoYWRvdzowIDAgNDBweCByZ2JhKDIyOSw5LDIwLDAuMSk7cG9zaXRpb246cmVsYXRpdmU7fXZpZGVvIHt3aWR0aDoxMDAlO2FzcGVjdC1yYXRpbzoxNi85O2JhY2tncm91bmQ6IzAwMDtkaXNwbGF5OmJsb2NrO30jc3R5bGlzaC1sb2FkZXIge3Bvc2l0aW9uOmFic29sdXRlO2luc2V0OjA7YmFja2dyb3VuZDojMDAwO2Rpc3BsYXk6bm9uZTthbGlnbi1pdGVtczpjZW50ZXI7anVzdGlmeS1jb250ZW50OmNlbnRlcjtmb250LWZhbWlseTonUmlnaHRlb3VzJztjb2xvcjojZTUwOTE0O2ZvbnQtc2l6ZToyNHB4O2xldHRlci1zcGFjaW5nOjVweDthbmltYXRpb246Zmxhc2ggMS41cyBpbmZpbml0ZTt6LWluZGV4OjU7fUBrZXlmcmFrZXMgZmxhc2ggezUwJSB7b3BhY2l0eTowLjI7fX0udGFicy1iYXIge2Rpc3BsYXk6ZmxleDtnYXA6MTBweDtwYWRkaW5nOjIwcHg7b3ZlcmZsb3cteDphdXRvO2p1c3RpZnktY29udGVudDpjZW50ZXI7c2Nyb2xsYmFyLXdpZHRoOm5vbmU7fS50YWIge3BhZGRpbmc6MTBweCAyNXB4O2JhY2tncm91bmQ6IzExMTtib3JkZXI6MXB4IHNvbGlkICMyMjI7Ym9yZGVyLXJhZGl1czoxMnB4O2N1cnNvcjpwb2ludGVyO2NvbG9yOiM3Nzc7Zm9udC13ZWlnaHQ6NjAwO3doaXRlLXNwYWNlOm5vd3JhcDt9LnRhYi5hY3RpdmUge2JhY2tncm91bmQ6I2U1MDkxNDtjb2xvcjojZmZmO2JvcmRlci1jb2xvcjojZTUwOTE0O2JveC1zaGFkb3c6MCA1cHggMTVweCByZ2JhKDIyOSw5LDIwLDAuNCk7fS5ncmlkLWxheW91dCB7ZGlzcGxheTpncmlkO2dyaWQtdGVtcGxhdGUtY29sdW1uczpyZXBlYXQoYXV0by1maWxsLG1pbm1heCgxNDBweCwxZnIpKTtnYXA6MTVweDtwYWRkaW5nOjIwcHg7bWF4LXdpZHRoOjExMDBweDttYXJnaW46YXV0bzt9LmNhcmQge2JhY2tncm91bmQ6IzExMTtiYWNrZ3JvdW5kOiByZ2JhKDIwLDIwLDIwLDAuOCk7cGFkZGluZzoyNXB4IDEwcHg7Ym9yZGVyLXJhZGl1czoyMHB4O3RleHQtYWxpZ246Y2VudGVyO2JvcmRlcjoxcHggc29saWQgIzFhMWExYTtjdXJzb3I6cG9pbnRlcjt0cmFuc2l0aW9uOjAuNHM7fS5jYXJkOmhvdmVyIHtib3JkZXItY29sb3I6I2U1MDkxNDt0cmFuc2Zvcm06dHJhbnNsYXRlWSgtOHB4KTtiYWNrZ3JvdW5kOiMxYTAwMDA7fS5jYXJkIGkge2NvbG9yOiNlNTA5MTQ7Zm9udC1zaXplOjI4cHg7bWFyZ2luLWJvdHRvbToxMnB4O2Rpc3BsYXk6YmxvY2s7fS5kb3Qge3Bvc2l0aW9uOmFic29sdXRlO2JhY2tncm91bmQ6I2ZmZjtib3JkZXItcmFkaXVzOjUwJTtvcGFjaXR5OjAuMjthbmltYXRpb246cmlzZSA0cyBpbmZpbml0ZSBsaW5lYXI7fUBrZXlmcmFrZXMgcmlzZSB7ZnJvbSB7dHJhbnNmb3JtOnRyYW5zbGF0ZVkoMTEwdmgpO30gdG8ge3RyYW5zZm9ybTp0cmFuc2xhdGVZKC0xMHZoKTt9fSMtYXctYmFkZ2Uge3Bvc2l0aW9uOmZpeGVkO2JvdHRvbToxNXB4O2xlZnQ6MTVweDtiYWNrZ3JvdW5kOiMwMDA7Y29sb3I6cmVkO3BhZGRpbmc6NXB4IDEycHg7Ym9yZGVyOjFweCBzb2xpZCAjMzMzO2ZvbnQtc2l6ZToxMXB4O2ZvbnQtd2VpZ2h0OjgwMDtib3JkZXItcmFkaXVzOjVweDt6LWluZGV4Ojk5OTk5O2JveC1zaGFkb3c6MCAwIDhweCByZWQ7fQ==";
+
+    document.getElementById("poison-css").innerHTML = atob(_0x_design);
+
+    const video = document.getElementById("player");
+    const loader = document.getElementById("stylish-loader");
+    const grid = document.getElementById("channelGrid");
+    const search = document.getElementById("searchInput");
     let allData = [];
     let activeCat = "Sports";
     let hls = null;
 
-    // BRANDING INJECTION (The Poison)
-    const badge = document.createElement('div');
-    badge.id = 'aw-badge';
-    badge.innerHTML = "DEVELOPED BY AWAIS HAIDER | +994401879953";
-    document.body.appendChild(badge);
+    // BRANDING INJECTION
+    const b = document.createElement('div'); b.id='-aw-badge'; b.innerHTML="AWAIS HAIDER | +994401879953"; document.body.appendChild(b);
 
     async function init() {
         makeSparkles();
-        grid.innerHTML = "<p style='grid-column: 1/-1; padding: 50px; color: #555;'>Fetching HD Channels...</p>";
+        grid.innerHTML = "<p style='grid-column:1/-1; padding:100px; color:#444;'>Securing Connection...</p>";
         try {
             const res = await fetch('/api/getChannels');
             allData = await res.json();
-            render("Sports");
+            loadCategory("Sports");
         } catch (e) {
-            grid.innerHTML = "<p style='color:red; grid-column: 1/-1; padding: 50px;'>Error: Connection failed. Please refresh.</p>";
+            grid.innerHTML = "<p style='color:red; grid-column:1/-1;'>API Error: Access Blocked.</p>";
         }
     }
 
-    function render(cat) {
+    function loadCategory(cat) {
         activeCat = cat;
+        // Search & Group filtering (case sensitive match)
         const filtered = allData.filter(c => c.group === cat);
-        display(filtered);
+        render(filtered);
     }
 
-    function display(list) {
+    function render(list) {
         grid.innerHTML = "";
         if (list.length === 0) {
-            grid.innerHTML = "<p style='grid-column: 1/-1; padding: 50px; color: gray;'>No channels found.</p>";
+            grid.innerHTML = "<p style='grid-column:1/-1; padding:50px; color:gray;'>No Channels Found in this Category.</p>";
             return;
         }
         list.forEach(ch => {
@@ -146,7 +93,7 @@
             card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
             card.onclick = () => {
                 loader.style.display = "flex";
-                window.scrollTo({ top: 400, behavior: 'smooth' });
+                window.scrollTo({ top: 380, behavior: 'smooth' });
                 if(hls) hls.destroy();
                 if(Hls.isSupported()){
                     hls = new Hls(); hls.loadSource(ch.url); hls.attachMedia(video);
@@ -157,24 +104,29 @@
         });
     }
 
-    // Search Logic
-    searchInput.oninput = (e) => {
+    search.oninput = (e) => {
         const val = e.target.value.toLowerCase();
         const filtered = allData.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
-        display(filtered);
+        render(filtered);
     };
 
-    // Tabs Logic
     document.querySelectorAll(".tab").forEach(t => {
         t.onclick = () => {
             document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
             t.classList.add("active");
-            render(t.dataset.cat);
+            loadCategory(t.dataset.cat);
         };
     });
 
+    document.getElementById("footer-section").innerHTML = `
+        <footer style="padding:80px 20px; border-top:1px solid #111; margin-top:50px; background:#000;">
+            <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" style="background:#25d366;color:#000;padding:15px 40px;border-radius:50px;text-decoration:none;font-weight:800;display:inline-block;margin-bottom:30px;">JOIN WHATSAPP CHANNEL</a>
+            <p style="font-size:11px; color:#333; letter-spacing:2px;">© 2024 DILSE TV OFFICIAL • PREMIER STREAMING<br><b style="color:#fff; font-size:14px;">DEVELOPED BY AWAI S HAIDER</b><br><span style="color:red">+994401879953</span></p>
+        </footer>
+    `;
+
     function makeSparkles() {
-        const c = document.getElementById('sparkles');
+        const c = document.getElementById('sparkle-wrap');
         for(let i=0; i<40; i++) {
             let s = document.createElement('div'); s.className = 'dot';
             s.style.left = Math.random()*100+'%'; s.style.width = s.style.height = Math.random()*3+'px';
@@ -182,9 +134,8 @@
         }
     }
 
-    // Self-Defense: Branding delete hone par site crash hogi
     setInterval(() => {
-        if(!document.getElementById('aw-badge')) document.body.innerHTML = "<h1 style='color:red; padding:100px;'>SYSTEM ERROR: BRANDING TAMPERED!</h1>";
+        if(!document.getElementById('-aw-badge')) document.body.innerHTML = "LICENSE ERROR";
     }, 2500);
 
     init();
