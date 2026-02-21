@@ -4,69 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>Dilse TV | Live Streaming by Awais Haider</title>
-    
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Dilse TV | Live Streaming</title>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
     <style>
-        :root { --red: #ff0000; --bg: #050505; --card: rgba(20, 20, 20, 0.95); }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg); color: #fff; overflow-x: hidden; scroll-behavior: smooth; }
-
-        #sparkle-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-        .dot { position: absolute; background: white; border-radius: 50%; opacity: 0.3; animation: float 4s infinite linear; }
-        @keyframes float { from { transform: translateY(100vh); } to { transform: translateY(-10vh); } }
-
-        .hero { width: 100%; height: 40vh; background: linear-gradient(to bottom, transparent, var(--bg)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; }
-        .hero h1 { font-family: 'Righteous', cursive; font-size: clamp(40px, 10vw, 70px); color: var(--red); text-shadow: 0 0 20px rgba(255,0,0,0.6); }
-
-        .search-container { margin-top: -30px; width: 90%; max-width: 600px; z-index: 10; position: relative; margin-left: auto; margin-right: auto; }
-        .search-bar { width: 100%; padding: 18px 30px; border-radius: 50px; border: 1px solid var(--red); background: rgba(0,0,0,0.9); color: #fff; outline: none; font-size: 16px; }
-
-        .player-box { width: 95%; max-width: 950px; margin: 40px auto; position: relative; }
-        .video-wrapper { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #222; }
+        :root { --red: #ff0000; --bg: #080808; }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 50px; }
+        .hero { text-align: center; padding: 40px 20px; background: linear-gradient(to bottom, #111, var(--bg)); }
+        .hero h1 { font-family: 'Righteous'; color: var(--red); font-size: 50px; margin: 0; }
+        .search-box { display: flex; justify-content: center; margin-top: -20px; }
+        .search-box input { width: 80%; max-width: 500px; padding: 15px 25px; border-radius: 30px; border: 1px solid var(--red); background: #000; color: #fff; outline: none; }
+        .player-container { max-width: 900px; margin: 30px auto; padding: 0 15px; }
+        .video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid #222; position: relative; }
         video { width: 100%; height: 100%; }
-
-        #vid-loading { position: absolute; inset: 0; background: #000; display: none; flex-direction: column; justify-content: center; align-items: center; z-index: 5; }
-        .load-txt { font-family: 'Righteous', cursive; font-size: 24px; color: var(--red); animation: pulse 1.5s infinite; }
-        @keyframes pulse { 50% { opacity: 0.2; } }
-
-        .tabs { display: flex; gap: 10px; padding: 20px; overflow-x: auto; justify-content: center; }
-        .tab { padding: 12px 25px; background: #111; border-radius: 12px; cursor: pointer; border: 1px solid #222; white-space: nowrap; color: #888; }
-        .tab.active { background: var(--red); color: #fff; border-color: var(--red); }
-
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: auto; min-height: 200px;}
-        .card { background: var(--card); padding: 25px 10px; border-radius: 18px; text-align: center; border: 1px solid #1a1a1a; cursor: pointer; }
+        #loading-overlay { position: absolute; inset: 0; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10; font-family: 'Righteous'; color: var(--red); display: none; }
+        .tabs { display: flex; overflow-x: auto; gap: 10px; padding: 20px; justify-content: center; scrollbar-width: none; }
+        .tab { padding: 10px 20px; background: #1a1a1a; border-radius: 10px; cursor: pointer; border: 1px solid #333; white-space: nowrap; font-size: 14px; }
+        .tab.active { background: var(--red); border-color: var(--red); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1100px; margin: auto; }
+        .card { background: #111; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
         .card:hover { border-color: var(--red); transform: translateY(-5px); }
         .card i { font-size: 25px; color: var(--red); margin-bottom: 10px; display: block; }
-
-        footer { padding: 60px 20px; text-align: center; border-top: 1px solid #111; }
-        .wa-btn { background: #25d366; color: #000; padding: 14px 40px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-block; margin-bottom: 20px; }
+        footer { text-align: center; padding: 40px; border-top: 1px solid #222; }
+        .wa-btn { background: #25d366; color: black; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
-<div id="sparkle-canvas"></div>
-
-<header style="position:absolute; top:20px; left:20px; z-index:100;">
-    <div style="font-family:'Righteous'; color:red; font-size:24px;">DILSE TV</div>
-</header>
-
 <section class="hero">
     <h1>DILSE TV</h1>
-    <p style="color:#aaa;">Premium Live Experience • Developed by Awais Haider</p>
+    <p>Premium Live HD Experience</p>
 </section>
 
-<div class="search-container">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Search Channels...">
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search Channels...">
 </div>
 
-<div class="player-box">
-    <div class="video-wrapper" id="vContainer">
-        <div id="vid-loading"><div class="load-txt">LOADING...</div></div>
+<div class="player-container">
+    <div class="video-box" id="vContainer">
+        <div id="loading-overlay">LOADING DILSE TV...</div>
         <video id="mainPlayer" controls playsinline></video>
     </div>
 </div>
@@ -74,46 +52,30 @@
 <div class="tabs">
     <div class="tab active" data-cat="Sports">Sports</div>
     <div class="tab" data-cat="Tamasha Premium">Premium</div>
-    <div class="tab" data-cat="Kids">Kids Zone</div>
+    <div class="tab" data-cat="Kids Zone">Kids Zone</div>
     <div class="tab" data-cat="India">India</div>
-    <div class="tab" data-cat="GlobalSports">Global</div>
+    <div class="tab" data-cat="Global">Global</div>
 </div>
 
-<div class="grid" id="mainGrid">
-    <p style="text-align:center; color:gray; grid-column: 1/-1;">Initializing system...</p>
-</div>
+<div class="grid" id="mainGrid"></div>
 
 <footer>
-    <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">JOIN WHATSAPP CHANNEL</a>
-    <div style="font-size:12px; color:#444;">
-        © 2024 DILSE TV OFFICIAL<br>
-        <b style="color:#fff;">DEVELOPED BY AWAIS HAIDER</b>
-    </div>
+    <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">JOIN WHATSAPP</a>
+    <div style="font-size: 12px; color: #555;">Developed by <b>Awais Haider</b></div>
 </footer>
 
 <script>
 (function(){
-    const _0x_k = () => {
-        const a = "dilse-tv-"; const b = "premium-"; const c = "key-se"; const d = "cure-32ch";
-        return a + b + c + d;
-    };
-
-    const _c = "I2F3LWJ1bGxldCB7IHBvc2l0aW9uOiBmaXhlZDsgYm90dG9tOiAyMHB4OyByaWdodDogMjBwejsgei1pbmRleDogOTk5OTk5OyBiYWNrZ3JvdW5kOiByZ2JhKDAsMCwwLDAuOSk7IGNvbG9yOiByZWQ7IHBhZGRpbmc6IDhweCAxNXB4OyBib3JkZXItcmFkaXVzOiA1cHg7IGZvbnQtc2l6ZTogMTFweDsgZm9udC13ZWlnaHQ6IDgwMDsgYm9yZGVyOiAxcHggc29saWQgIzIyMjsgcG9pbnRlci1ldmVudHM6IG5vbmU7IHRleHQtdHJhbnNmb3JtOiB1cHBlcmNhc2U7IH0=";
-    const _n = "RGV2ZWxvcGVkIGJ5IEF3YWlzIEhhaWRlcg==";
-
-    function secureBranding() {
-        const s = document.createElement('style'); s.innerHTML = atob(_c); document.head.appendChild(s);
-        const div = document.createElement('div'); div.id = 'aw-bullet'; div.innerHTML = atob(_n); document.body.appendChild(div);
-        setInterval(() => { if (!document.getElementById('aw-bullet')) document.body.innerHTML = "SYSTEM ERROR"; }, 3000);
-    }
+    // IMPORTANT: Matching Backend Key
+    const _0x_k = () => "dilse-tv-premium-key-secure-32ch";
 
     const video = document.getElementById("mainPlayer");
-    const loading = document.getElementById("vid-loading");
+    const loader = document.getElementById("loading-overlay");
     const grid = document.getElementById("mainGrid");
     const search = document.getElementById("searchInput");
-    let db = [];
+    let allData = [];
     let activeCat = "Sports";
-    let hlsObj = null;
+    let hls = null;
 
     function decrypt(cipher, ivHex) {
         try {
@@ -125,30 +87,28 @@
     }
 
     async function init() {
-        secureBranding();
-        sparkleEffect();
+        grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Fetching Encrypted Data...</p>";
         try {
             const res = await fetch('/api/getChannels');
-            if (!res.ok) throw new Error("Security Blocked Request");
             const data = await res.json();
+            if(data.error) throw new Error(data.error);
             const raw = decrypt(data.d, data.i);
-            db = JSON.parse(raw);
+            allData = JSON.parse(raw);
             render("Sports");
         } catch (e) {
-            grid.innerHTML = `<p style="color:red; text-align:center; grid-column:1/-1;">Access Error: Please refresh or check connection.</p>`;
+            grid.innerHTML = `<p style='grid-column:1/-1; text-align:center; color:red;'>Error: ${e.message}</p>`;
         }
     }
 
     function render(cat) {
         activeCat = cat;
-        const filtered = db.filter(c => c.group === cat);
-        display(filtered);
-    }
-
-    function display(list) {
+        const filtered = allData.filter(c => c.group === cat);
         grid.innerHTML = "";
-        if(list.length === 0) grid.innerHTML = "<p style='color:gray; grid-column:1/-1; text-align:center;'>No channels found.</p>";
-        list.forEach(ch => {
+        if(filtered.length === 0) {
+            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No channels found in this category.</p>";
+            return;
+        }
+        filtered.forEach(ch => {
             const card = document.createElement("div");
             card.className = "card";
             card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
@@ -158,23 +118,35 @@
     }
 
     function play(url) {
-        loading.style.display = "flex";
+        loader.style.display = "flex";
         window.scrollTo({ top: 350, behavior: 'smooth' });
-        if(hlsObj) hlsObj.destroy();
+        if(hls) hls.destroy();
         if (Hls.isSupported()) {
-            hlsObj = new Hls(); hlsObj.loadSource(url); hlsObj.attachMedia(video);
-            hlsObj.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-        } else { video.src = url; video.play(); }
+            hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => { video.play(); loader.style.display="none"; });
+        } else {
+            video.src = url;
+            video.play();
+            video.onplaying = () => loader.style.display="none";
+        }
     }
-
-    video.onplaying = () => loading.style.display = "none";
-    video.onwaiting = () => loading.style.display = "flex";
 
     search.oninput = (e) => {
         const val = e.target.value.toLowerCase();
-        const filtered = db.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
-        display(filtered);
+        const filtered = allData.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
+        renderList(filtered);
     };
+
+    function renderList(list) {
+        grid.innerHTML = "";
+        list.forEach(ch => {
+            const card = document.createElement("div");
+            card.className = "card";
+            card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
+            card.onclick = () => play(ch.url);
+            grid.appendChild(card);
+        });
+    }
 
     document.querySelectorAll(".tab").forEach(t => {
         t.onclick = () => {
@@ -183,15 +155,6 @@
             render(t.dataset.cat);
         };
     });
-
-    function sparkleEffect() {
-        const c = document.getElementById('sparkle-canvas');
-        for(let i=0; i<30; i++) {
-            let s = document.createElement('div'); s.className = 'dot';
-            s.style.left = Math.random()*100+'%'; s.style.width = s.style.height = Math.random()*3+'px';
-            s.style.animationDuration = Math.random()*3+2+'s'; c.appendChild(s);
-        }
-    }
 
     init();
 })();
