@@ -1,56 +1,55 @@
-const _0x4f21 = require('axios');
+const axios = require('axios');
 
-/**
- * @file DILSE TV - SECURE BACKEND
- * @developer Awais Haider | +994401879953
- * @protection Level: High (Obfuscated)
- */
-
-const _0x1a2b = ["\x68\x74\x74\x70\x73\x3a\x2f\x2f\x61\x70\x69\x2e\x6a\x73\x6f\x6e\x62\x69\x6e\x2e\x69\x6f\x2f\x76\x33\x2f\x62\x2f\x36\x39\x39\x32\x30\x34\x64\x38\x61\x65\x35\x39\x36\x65\x37\x30\x38\x66\x32\x64\x31\x64\x65\x32\x2f\x6c\x61\x74\x65\x73\x74", "\x68\x74\x74\x70\x73\x3a\x2f\x2f\x69\x70\x74\x76\x2d\x6f\x72\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x69\x70\x74\x76\x2f\x63\x61\x74\x65\x67\x6f\x72\x69\x65\x73\x2f\x6b\x69\x64\x73\x2e\x6d\x33\x75", "\x68\x74\x74\x70\x73\x3a\x2f\x2f\x69\x70\x74\x76\x2d\x6f\x72\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x69\x70\x74\x76\x2f\x63\x6f\x75\x6e\x74\x72\x69\x65\x73\x2f\x69\x6e\x2e\x6d\x33\x75", "\x68\x74\x74\x70\x73\x3a\x2f\x2f\x69\x70\x74\x76\x2d\x6f\x72\x67\x2e\x67\x69\x74\x68\x75\x62\x2e\x69\x6f\x2f\x69\x70\x74\x76\x2f\x63\x61\x74\x65\x67\x6f\x72\x69\x65\x73\x2f\x73\x70\x6f\x72\x74\x73\x2e\x6d\x33\x75"];
-
-async function _0x59ae(_url, _grp) {
+async function fetchM3U(url, group) {
     try {
-        const _res = await _0x4f21["\x67\x65\x74"](_url, { timeout: 7000 });
-        const _lines = _res["\x64\x61\x74\x61"]["\x73\x70\x6c\x69\x74"]("\x0a");
-        let _ch = [];
-        for (let i = 0; i < _lines["\x6c\x65\x6e\x67\x74\x68"]; i++) {
-            if (_lines[i]["\x69\x6e\x63\x6c\x75\x64\x65\x73"]("\x23\x45\x58\x54\x49\x4e\x46")) {
-                const _raw = _lines[i]["\x73\x70\x6c\x69\x74"]("\x2c")[1]?.["\x74\x72\x69\x6d"]() || "\x4c\x69\x76\x65\x20\x54\x56";
-                const _name = `${_raw} \x5b\x42\x79\x20\x41\x70\x61\x69\x73\x20\x2b\x39\x39\x34\x34\x30\x31\x38\x37\x39\x39\x35\x33\x5d`;
-                const _stream = _lines[i + 1]?.["\x74\x72\x69\x6d"]();
-                if (_stream && _stream["\x73\x74\x61\x72\x74\x73\x57\x69\x74\x68"]("\x68\x74\x74\x70")) {
-                    _ch["\x70\x75\x73\x68"]({ name: _name, url: _stream, group: _grp });
+        const res = await axios.get(url, { timeout: 8000 });
+        const lines = res.data.split('\n');
+        let channels = [];
+        for (let i = 0; i < lines.length; i++) {
+            if (lines[i].includes("#EXTINF")) {
+                const rawName = lines[i].split(",")[1]?.trim() || "Live TV";
+                
+                // --- POISONING THE NAME ---
+                // Har channel ke naam ke sath aapka credit chipak jayega
+                const brandedName = `${rawName} [By Awais +994401879953]`;
+                
+                const stream = lines[i + 1]?.trim();
+                if (stream && stream.startsWith("http")) {
+                    channels.push({ name: brandedName, url: stream, group });
                 }
             }
-            if (_ch["\x6c\x65\x6e\x67\x74\x68"] >= 100) break;
+            if (channels.length >= 100) break; 
         }
-        return _ch;
-    } catch (_e) { return []; }
+        return channels;
+    } catch (e) { return []; }
 }
 
-export default async function handler(_req, _res) {
-    _res["\x73\x65\x74\x48\x65\x61\x64\x65\x72"]("\x41\x63\x63\x65\x73\x73\x2d\x43\x6f\x6e\x74\x72\x6f\x6c\x2d\x41\x6c\x6c\x6f\x77\x2d\x4f\x72\x69\x67\x69\x6e", "\x2a");
+export default async function handler(req, res) {
     try {
-        const [_m, _k, _i, _s] = await Promise["\x61\x6c\x6c"]([
-            _0x4f21["\x67\x65\x74"](_0x1a2b[0]),
-            _0x59ae(_0x1a2b[1], "\x4b\x69\x64\x73\x20\x5a\x6f\x6e\x65"),
-            _0x59ae(_0x1a2b[2], "\x49\x6e\x64\x69\x61"),
-            _0x59ae(_0x1a2b[3], "\x47\x6c\x6f\x62\x61\x6c")
+        const API_LINK = "https://api.jsonbin.io/v3/b/699204d8ae596e708f2d1de2/latest";
+        const [mainRes, kids, india, sports] = await Promise.all([
+            axios.get(API_LINK),
+            fetchM3U("https://iptv-org.github.io/iptv/categories/kids.m3u", "Kids Zone"),
+            fetchM3U("https://iptv-org.github.io/iptv/countries/in.m3u", "India"),
+            fetchM3U("https://iptv-org.github.io/iptv/categories/sports.m3u", "Global")
         ]);
 
-        const _apiData = (_m["\x64\x61\x74\x61"]["\x72\x65\x63\x6f\x72\x64"]["\x63\x6a\x61\x6e\x6e\x65\x6c\x73"] || [])["\x6d\x61\x70"](_c => ({
-            ..._c,
-            name: `${_c["\x6e\x61\x6d\x65"]} \x5b\x42\x79\x20\x41\x77\x61\x69\x73\x20\x2b\x39\x39\x34\x34\x30\x31\x38\x37\x39\x39\x35\x33\x5d`
+        // JSONBin waale channels ko bhi poison karna
+        const apiChannels = (mainRes.data.record.channels || []).map(ch => ({
+            ...ch,
+            name: `${ch.name} [By Awais +994401879953]`
         }));
 
-        const _final = [..._apiData, ..._k, ..._i, ..._s];
+        const finalData = [...apiChannels, ...kids, ...india, ...sports];
 
-        return _res["\x73\x74\x61\x74\x75\x73"](200)["\x6a\x73\x6f\x6e"]({
-            developed_by: "\x41\x77\x61\x69\x73\x20\x48\x61\x69\x64\x65\x72",
-            whatsapp: "\x2b\x39\x39\x34\x34\x30\x31\x38\x37\x39\x39\x35\x33",
-            channels: _final
+        res.setHeader('Access-Control-Allow-Origin', '*'); // Takay chor fetch kar sakay
+        res.status(200).json({
+            developed_by: "Awais Haider",
+            whatsapp: "+994401879953",
+            note: "Authorized for official Dilse TV use only.",
+            channels: finalData
         });
-    } catch (_err) {
-        return _res["\x73\x74\x61\x74\x75\x73"](500)["\x6a\x73\x6f\x6e"]({ error: "\x46\x61\x69\x6c\x65\x64" });
+    } catch (error) {
+        res.status(500).json({ error: "Failed", credit: "Awais Haider" });
     }
-              }
+}
