@@ -3,91 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dilse TV | Premium</title>
-    <!-- Sirf Fonts aur HLS load honge -->
+    <title>Dilse TV | Live Streaming</title>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style id="dilse-style"></style> <!-- CSS yahan inject hogi -->
+    <style id="injected-style"></style>
 </head>
 <body>
 
-<div id="sparkle-container"></div>
+<div id="sparkles"></div>
 
 <section class="hero-home">
     <h1 id="hero-title">DILSE TV</h1>
     <p>Premium Live HD Streaming</p>
 </section>
 
-<center>
-    <div class="search-container">
-        <input type="text" id="search-bar" class="search-bar" placeholder="Search Channels...">
-    </div>
-</center>
+<div style="margin-top:-20px">
+    <input type="text" id="search" class="search-bar" placeholder="Search Channels...">
+</div>
 
 <div class="player-box">
-    <div class="video-wrapper" id="v-wrapper">
-        <div id="stylish-loader">DILSE TV LOADING...</div>
+    <div style="position:relative">
+        <div id="loader-style">DILSE TV LOADING...</div>
         <video id="player" controls autoplay playsinline></video>
     </div>
 </div>
 
-<div class="tabs" id="category-tabs">
+<div class="tabs">
     <div class="tab active" data-cat="Sports">Sports</div>
-    <div class="tab" data-cat="Kids">Kids Zone</div>
+    <div class="tab" data-cat="Kids Zone">Kids Zone</div>
     <div class="tab" data-cat="Entertainment">Entertainment</div>
 </div>
 
-<div class="grid" id="main-grid"></div>
+<div class="grid" id="grid"></div>
 
-<footer id="footer-branding"></footer>
+<footer id="footer"></footer>
 
 <script>
 (function(){
-    const video = document.getElementById("player");
-    const loader = document.getElementById("stylish-loader");
-    const grid = document.getElementById("main-grid");
-    const styleTag = document.getElementById("dilse-style");
+    const player = document.getElementById("player");
+    const loader = document.getElementById("loader-style");
+    const grid = document.getElementById("grid");
+    const styleTag = document.getElementById("injected-style");
     
     let db = [];
     let currentCat = "Sports";
     let hls = null;
 
     async function init() {
-        grid.innerHTML = "<p>Loading Secure UI & Channels...</p>";
+        grid.innerHTML = "<p style='padding:50px'>Securing Connection & Loading Design...</p>";
         try {
             const res = await fetch('/api/getChannels');
             const data = await res.json();
             
-            // 1. Backend se aayi hui CSS inject karna
-            styleTag.innerHTML = atob(data.ui);
+            // 1. Injected CSS from Backend (The Poison)
+            styleTag.innerHTML = atob(data.style);
             
-            // 2. Branding Inject karna (No way to escape)
+            // 2. Branding & WhatsApp
             const badge = document.createElement('div');
-            badge.id = 'hack-badge';
+            badge.id = 'aw-dev-badge';
             badge.innerHTML = atob(data.dev);
             document.body.appendChild(badge);
 
-            const footer = document.getElementById('footer-branding');
-            footer.innerHTML = `
+            document.getElementById('footer').innerHTML = `
                 <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" style="background:#25d366;color:#000;padding:12px 35px;border-radius:50px;text-decoration:none;font-weight:800;display:inline-block;margin-bottom:20px;">JOIN WHATSAPP CHANNEL</a>
-                <p style="font-size:12px;color:#444;">DEVELOPED BY <b>AWAI S HAIDER</b><br>Contact: +994401879953</p>
+                <p style="font-size:12px;color:#444;">DEVELOPED BY <b>AWAI S HAIDER</b><br>WhatsApp: +994401879953</p>
             `;
 
-            // 3. Channels Load karna
+            // 3. Render Channels
             db = data.channels;
-            loadCategory("Sports");
+            loadCat("Sports");
             makeSparkles();
-            
-            // Self-Defense
-            setInterval(() => {
-                if(!document.getElementById('hack-badge')) document.body.innerHTML = "<h1>SYSTEM CRASH: UNAUTHORIZED TAMPERING DETECTED</h1>";
-            }, 2000);
 
-        } catch (e) { grid.innerHTML = "Security Connection Failed."; }
+            // Anti-Tamper Mechanism
+            setInterval(() => {
+                if(!document.getElementById('aw-dev-badge')) document.body.innerHTML = "<h1>LICENSE EXPIRED: CONTACT AWAIS HAIDER</h1>";
+            }, 3000);
+
+        } catch (e) { grid.innerHTML = "Failed to load UI."; }
     }
 
-    function loadCategory(cat) {
+    function loadCat(cat) {
         currentCat = cat;
         const filtered = db.filter(c => c.group === cat);
         render(filtered);
@@ -100,36 +96,36 @@
             card.className = "card";
             card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
             card.onclick = () => {
-                loader.style.display = "flex";
-                window.scrollTo({ top: 350, behavior: 'smooth' });
+                if(loader) loader.style.display = "flex";
+                window.scrollTo({ top: 380, behavior: 'smooth' });
                 if(hls) hls.destroy();
                 if(Hls.isSupported()){
-                    hls = new Hls(); hls.loadSource(ch.url); hls.attachMedia(video);
-                    hls.on(Hls.Events.MANIFEST_PARSED, () => { video.play(); loader.style.display="none"; });
-                } else { video.src = ch.url; video.play(); video.onplaying = () => loader.style.display="none"; }
+                    hls = new Hls(); hls.loadSource(ch.url); hls.attachMedia(player);
+                    hls.on(Hls.Events.MANIFEST_PARSED, () => { player.play(); if(loader) loader.style.display="none"; });
+                } else { player.src = ch.url; player.play(); player.onplaying = () => { if(loader) loader.style.display="none"; } }
             };
             grid.appendChild(card);
         });
     }
 
-    // Tabs & Search logic
+    // Tabs & Search
     document.querySelectorAll(".tab").forEach(t => {
         t.onclick = () => {
             document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
             t.classList.add("active");
-            loadCategory(t.dataset.cat);
+            loadCat(t.dataset.cat);
         };
     });
 
-    document.getElementById("search-bar").oninput = (e) => {
+    document.getElementById("search").oninput = (e) => {
         const val = e.target.value.toLowerCase();
         const filtered = db.filter(c => c.group === currentCat && c.name.toLowerCase().includes(val));
         render(filtered);
     };
 
     function makeSparkles() {
-        const c = document.getElementById('sparkle-container');
-        for(let i=0; i<40; i++) {
+        const c = document.getElementById('sparkles');
+        for(let i=0; i<35; i++) {
             let s = document.createElement('div'); s.className = 'dot';
             s.style.left = Math.random()*100+'%'; s.style.width = s.style.height = Math.random()*3+'px';
             s.style.animationDuration = Math.random()*3+2+'s'; c.appendChild(s);
