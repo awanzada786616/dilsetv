@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function fetchM3U(url, group) {
     try {
-        const res = await axios.get(url, { timeout: 8000 });
+        const res = await axios.get(url, { timeout: 7000 });
         const lines = res.data.split('\n');
         let channels = [];
         for (let i = 0; i < lines.length; i++) {
@@ -13,7 +13,7 @@ async function fetchM3U(url, group) {
                     channels.push({ name, url: stream, group });
                 }
             }
-            if (channels.length >= 150) break; 
+            if (channels.length >= 100) break; 
         }
         return channels;
     } catch (e) { return []; }
@@ -24,7 +24,7 @@ export default async function handler(req, res) {
         const API_LINK = "https://api.jsonbin.io/v3/b/699204d8ae596e708f2d1de2/latest";
         const [mainRes, kids, india, sports] = await Promise.all([
             axios.get(API_LINK),
-            fetchM3U("https://iptv-org.github.io/iptv/categories/kids.m3u", "Kids"),
+            fetchM3U("https://iptv-org.github.io/iptv/categories/kids.m3u", "Kids Zone"),
             fetchM3U("https://iptv-org.github.io/iptv/countries/in.m3u", "India"),
             fetchM3U("https://iptv-org.github.io/iptv/categories/sports.m3u", "Global")
         ]);
