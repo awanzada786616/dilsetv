@@ -3,44 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dilse TV | Live Premium HD</title>
-    
+    <title>Dilse TV | Premium HD</title>
     <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@300;600;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-
     <style>
-        /* CORE LAYOUT - Yeh hamesha load hoga */
         :root { --main: #ff0000; --bg: #000; }
         body { background: var(--bg); color: #fff; font-family: 'Poppins', sans-serif; margin: 0; text-align: center; }
-        
-        .hero-poster { padding: 60px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.7), #000), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000'); background-size: cover; background-position: center; }
-        .hero-poster h1 { font-family: 'Righteous', cursive; font-size: 55px; margin: 0; color: var(--main); text-shadow: 0 0 20px rgba(255,0,0,0.5); }
-        
-        .search-box { margin-top: -30px; }
-        .search-bar { width: 85%; max-width: 500px; padding: 16px 25px; border-radius: 50px; border: 1px solid var(--main); background: #000; color: #fff; outline: none; box-shadow: 0 10px 30px #000; }
-
-        .player-container { max-width: 950px; margin: 40px auto; padding: 0 15px; }
-        .video-shell { position: relative; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #222; box-shadow: 0 0 30px rgba(255,0,0,0.1); }
-        video { width: 100%; height: 100%; }
-
-        #load-ui { position: absolute; inset: 0; background: #000; display: none; align-items: center; justify-content: center; font-family: 'Righteous'; color: var(--main); font-size: 22px; z-index: 5; letter-spacing: 4px; }
-
-        .tabs-nav { display: flex; gap: 10px; padding: 20px; overflow-x: auto; justify-content: center; scrollbar-width: none; }
+        .hero { padding: 60px 20px; background: linear-gradient(to bottom, rgba(0,0,0,0.7), #000), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=2000'); background-size: cover; background-position: center; }
+        .hero h1 { font-family: 'Righteous', cursive; font-size: 55px; margin: 0; color: var(--main); text-shadow: 0 0 20px rgba(255,0,0,0.5); }
+        .search-bar { width: 85%; max-width: 500px; padding: 16px 25px; border-radius: 50px; border: 1px solid var(--main); background: #000; color: #fff; outline: none; margin-top: -30px; position: relative; z-index: 10; }
+        .player-container { max-width: 950px; margin: 40px auto; border: 1px solid #222; border-radius: 20px; overflow: hidden; position: relative; }
+        video { width: 100%; aspect-ratio: 16/9; display: block; background: #000; }
+        #v-load { position: absolute; inset: 0; background: #000; display: none; align-items: center; justify-content: center; font-family: 'Righteous'; color: var(--main); z-index: 5; letter-spacing: 4px; }
+        .tabs { display: flex; gap: 10px; padding: 20px; overflow-x: auto; justify-content: center; scrollbar-width: none; }
         .tab { padding: 12px 25px; background: #111; border-radius: 12px; cursor: pointer; border: 1px solid #222; white-space: nowrap; font-weight: 600; color: #888; }
-        .tab.active { background: var(--main); color: #fff; border-color: var(--main); box-shadow: 0 5px 15px rgba(255,0,0,0.4); }
-
-        .grid-view { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: auto; min-height: 300px; }
-        .card { background: #111; padding: 25px 10px; border-radius: 18px; text-align: center; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; }
-        .card:hover { border-color: var(--main); transform: translateY(-5px); background: #1a0000; }
+        .tab.active { background: var(--main); color: #fff; border-color: var(--main); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1200px; margin: auto; }
+        .card { background: #111; padding: 25px 10px; border-radius: 18px; border: 1px solid #1a1a1a; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--main); transform: translateY(-5px); }
         .card i { font-size: 28px; color: var(--main); margin-bottom: 12px; display: block; }
-        .card span { font-size: 13px; font-weight: 600; }
-
         .dot { position: absolute; background: #fff; border-radius: 50%; opacity: 0.2; animation: float 4s infinite linear; pointer-events: none; }
-        @keyframes float { from { transform: translateY(105vh); } to { transform: translateY(-5vh); } }
-
-        footer { padding: 80px 20px; border-top: 1px solid #111; margin-top: 50px; background: #000; }
-        .wa-btn { background: #25d366; color: #000; padding: 14px 40px; border-radius: 50px; text-decoration: none; font-weight: 900; display: inline-block; margin-bottom: 25px; box-shadow: 0 5px 15px rgba(37,211,102,0.4); }
+        @keyframes float { from { transform: translateY(105vh); } to { transform: translateY(-10vh); } }
+        footer { padding: 60px 20px; border-top: 1px solid #111; margin-top: 50px; }
+        .wa-btn { background: #25d366; color: #000; padding: 14px 40px; border-radius: 50px; text-decoration: none; font-weight: 900; display: inline-block; margin-bottom: 25px; }
     </style>
 </head>
 <body>
@@ -48,26 +34,22 @@
 <div id="sparkles"></div>
 
 <header style="position: absolute; top: 25px; left: 25px; z-index: 100;">
-    <div id="brand-logo" style="font-family: 'Righteous'; color: #ff0000; font-size: 28px;">DILSE TV</div>
+    <div style="font-family: 'Righteous'; color: #ff0000; font-size: 28px;">DILSE TV</div>
 </header>
 
-<section class="hero-poster">
-    <h1 id="main-h">DILSE TV</h1>
-    <p id="sub-h">Premium Live HD Streaming Experience</p>
+<section class="hero">
+    <h1>DILSE TV</h1>
+    <p style="color: #666;">Developed by Awais Haider</p>
 </section>
 
-<div class="search-box">
-    <input type="text" id="searchInput" class="search-bar" placeholder="Search Channels...">
-</div>
+<input type="text" id="search" class="search-bar" placeholder="Search Channels...">
 
 <div class="player-container">
-    <div class="video-shell">
-        <div id="load-ui">DILSE TV LOADING...</div>
-        <video id="player" controls autoplay playsinline></video>
-    </div>
+    <div id="v-load">DILSE TV LOADING...</div>
+    <video id="player" controls autoplay playsinline></video>
 </div>
 
-<div class="tabs-nav">
+<div class="tabs">
     <div class="tab active" data-cat="Sports">Sports</div>
     <div class="tab" data-cat="Tamasha Premium">Tamasha</div>
     <div class="tab" data-cat="Kids Zone">Kids Zone</div>
@@ -75,67 +57,54 @@
     <div class="tab" data-cat="Global">Global</div>
 </div>
 
-<div class="grid-view" id="channelGrid"></div>
+<div class="grid" id="grid"></div>
 
 <footer id="footer"></footer>
 
 <script>
 (function(){
-    // --- THE POISON LOGIC (Unremovable Branding) ---
-    const _0x_name = "RGV2ZWxvcGVkIGJ5IEF3YWlzIEhhaWRlciB8IFdoYXRzQXBwOiArOTk0NDAxODc5OTUz";
+    // POISON BRANDING
     const badge = document.createElement('div');
-    badge.id = 'aw-poison-badge';
-    badge.style = "position:fixed; bottom:15px; right:15px; background:#000; color:red; padding:6px 12px; border:1px solid #333; font-size:10px; font-weight:bold; border-radius:5px; z-index:9999; box-shadow:0 0 10px red; pointer-events:none;";
-    badge.innerHTML = atob(_0x_name);
+    badge.id = 'aw-credit-badge';
+    badge.style = "position:fixed; bottom:15px; left:15px; background:#000; color:red; padding:6px 12px; border:1px solid #333; font-size:10px; font-weight:bold; border-radius:5px; z-index:10000; box-shadow:0 0 10px red; pointer-events:none;";
+    badge.innerHTML = "DEVELOPED BY AWAIS HAIDER | +994401879953";
     document.body.appendChild(badge);
 
-    // Self-Defense
-    setInterval(() => {
-        if(!document.getElementById('aw-poison-badge')) {
-            document.body.innerHTML = "<h1 style='color:red; text-align:center; padding-top:100px;'>LICENSE EXPIRED: CREDIT REMOVED!</h1>";
-        }
-    }, 2000);
-
     const player = document.getElementById("player");
-    const loader = document.getElementById("load-ui");
-    const grid = document.getElementById("channelGrid");
-    const search = document.getElementById("searchInput");
+    const loader = document.getElementById("v-load");
+    const grid = document.getElementById("grid");
     
     let db = [];
-    let activeCategory = "Sports";
+    let activeCat = "Sports";
     let hls = null;
 
     async function init() {
         makeSparkles();
-        grid.innerHTML = "<p style='grid-column:1/-1; padding:50px; color:#555;'>Connecting to Dilse TV Servers...</p>";
+        grid.innerHTML = "<p>Connecting to Branded Servers...</p>";
         try {
             const res = await fetch('/api/getChannels');
-            db = await res.json();
-            loadCategory("Sports");
-        } catch (e) {
-            grid.innerHTML = "<p style='color:red; grid-column:1/-1;'>API Error: Connection failed.</p>";
-        }
+            const data = await res.json();
+            
+            // Branding check
+            console.log("Developer:", data.developed_by);
+            console.log("WhatsApp:", data.whatsapp);
+
+            db = data.channels; // API se channels nikalna
+            render("Sports");
+        } catch (e) { grid.innerHTML = "API Error."; }
     }
 
-    function loadCategory(cat) {
-        activeCategory = cat;
+    function render(cat) {
+        activeCat = cat;
         const filtered = db.filter(c => c.group === cat);
-        render(filtered);
-    }
-
-    function render(list) {
         grid.innerHTML = "";
-        if (list.length === 0) {
-            grid.innerHTML = "<p style='grid-column:1/-1; padding:50px; color:gray;'>No Channels Found.</p>";
-            return;
-        }
-        list.forEach(ch => {
+        filtered.forEach(ch => {
             const card = document.createElement("div");
             card.className = "card";
             card.innerHTML = `<i class="fa-solid fa-circle-play"></i><span>${ch.name}</span>`;
             card.onclick = () => {
                 loader.style.display = "flex";
-                window.scrollTo({ top: 400, behavior: 'smooth' });
+                window.scrollTo({ top: 350, behavior: 'smooth' });
                 if(hls) hls.destroy();
                 if(Hls.isSupported()){
                     hls = new Hls(); hls.loadSource(ch.url); hls.attachMedia(player);
@@ -146,9 +115,9 @@
         });
     }
 
-    search.oninput = (e) => {
+    document.getElementById("search").oninput = (e) => {
         const val = e.target.value.toLowerCase();
-        const filtered = db.filter(c => c.group === activeCategory && c.name.toLowerCase().includes(val));
+        const filtered = db.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
         render(filtered);
     };
 
@@ -156,23 +125,27 @@
         t.onclick = () => {
             document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
             t.classList.add("active");
-            loadCategory(t.dataset.cat);
+            render(t.dataset.cat);
         };
     });
 
     document.getElementById("footer").innerHTML = `
         <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">JOIN WHATSAPP CHANNEL</a>
-        <p style="font-size:12px; color:#444; letter-spacing:2px;">OFFICIAL PLATFORM © 2024<br><b style="color:#fff; font-size:15px;">DEVELOPED BY AWAI S HAIDER</b><br><span style="color:red">+994401879953</span></p>
+        <p style="font-size:12px; color:#444;">OFFICIAL PLATFORM © 2024<br><b style="color:#fff; font-size:15px;">DEVELOPED BY AWAI S HAIDER</b><br><span style="color:red">+994401879953</span></p>
     `;
 
     function makeSparkles() {
         const c = document.getElementById('sparkles');
-        for(let i=0; i<40; i++) {
+        for(let i=0; i<35; i++) {
             let s = document.createElement('div'); s.className = 'dot';
             s.style.left = Math.random()*100+'%'; s.style.width = s.style.height = Math.random()*3+'px';
             s.style.animationDuration = Math.random()*3+2+'s'; c.appendChild(s);
         }
     }
+
+    setInterval(() => {
+        if(!document.getElementById('aw-credit-badge')) document.body.innerHTML = "CREDIT REMOVED!";
+    }, 2500);
 
     init();
 })();
