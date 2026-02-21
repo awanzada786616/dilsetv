@@ -2,7 +2,7 @@ const axios = require('axios');
 
 async function fetchM3U(url, group) {
     try {
-        const res = await axios.get(url, { timeout: 7000 });
+        const res = await axios.get(url, { timeout: 8000 });
         const lines = res.data.split('\n');
         let channels = [];
         for (let i = 0; i < lines.length; i++) {
@@ -13,7 +13,7 @@ async function fetchM3U(url, group) {
                     channels.push({ name, url: stream, group });
                 }
             }
-            if (channels.length >= 100) break; 
+            if (channels.length >= 150) break; 
         }
         return channels;
     } catch (e) { return []; }
@@ -30,11 +30,20 @@ export default async function handler(req, res) {
         ]);
 
         const apiChannels = mainRes.data.record.channels || [];
-        const finalData = [...apiChannels, ...kids, ...india, ...sports];
+        const allData = [...apiChannels, ...kids, ...india, ...sports];
 
         res.setHeader('Access-Control-Allow-Origin', '*');
-        res.status(200).json(finalData);
+        
+        // --- BRANDED JSON RESPONSE ---
+        res.status(200).json({
+            developed_by: "Awais Haider",
+            whatsapp: "+994401879953",
+            official_site: "dilsetv.vercel.app",
+            status: "Active",
+            total_channels: allData.length,
+            channels: allData // Saare channels iske andar honge
+        });
     } catch (error) {
-        res.status(500).json([]);
+        res.status(500).json({ error: "API Failed", developer: "Awais Haider" });
     }
 }
