@@ -3,83 +3,84 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer-when-downgrade">
     <title>Dilse TV | Live Streaming</title>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --red: #ff0000; --bg: #080808; }
-        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding-bottom: 50px; }
-        .hero { text-align: center; padding: 40px 20px; background: linear-gradient(to bottom, #111, var(--bg)); }
-        .hero h1 { font-family: 'Righteous'; color: var(--red); font-size: 50px; margin: 0; }
-        .search-box { display: flex; justify-content: center; margin-top: -20px; }
-        .search-box input { width: 80%; max-width: 500px; padding: 15px 25px; border-radius: 30px; border: 1px solid var(--red); background: #000; color: #fff; outline: none; }
-        .player-container { max-width: 900px; margin: 30px auto; padding: 0 15px; }
-        .video-box { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; border: 1px solid #222; position: relative; }
+        :root { --red: #ff0000; --bg: #050505; }
+        body { background: var(--bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; }
+        .hero { padding: 40px 20px; text-align: center; background: linear-gradient(to bottom, #111, var(--bg)); }
+        .hero h1 { font-family: 'Righteous'; color: var(--red); font-size: 50px; margin: 0; letter-spacing: 2px; }
+        
+        .search-area { display: flex; justify-content: center; margin-top: -25px; }
+        .search-bar { width: 85%; max-width: 500px; padding: 15px 25px; border-radius: 50px; border: 1px solid var(--red); background: #000; color: #fff; outline: none; box-shadow: 0 0 20px rgba(255,0,0,0.2); }
+
+        .player-container { max-width: 900px; margin: 40px auto; padding: 0 15px; }
+        .video-wrapper { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; }
         video { width: 100%; height: 100%; }
-        #loading-overlay { position: absolute; inset: 0; background: #000; display: flex; align-items: center; justify-content: center; z-index: 10; font-family: 'Righteous'; color: var(--red); display: none; }
+        #loader-ui { position: absolute; inset: 0; background: #000; display: none; align-items: center; justify-content: center; font-family: 'Righteous'; color: var(--red); font-size: 20px; z-index: 10; }
+
         .tabs { display: flex; overflow-x: auto; gap: 10px; padding: 20px; justify-content: center; scrollbar-width: none; }
-        .tab { padding: 10px 20px; background: #1a1a1a; border-radius: 10px; cursor: pointer; border: 1px solid #333; white-space: nowrap; font-size: 14px; }
-        .tab.active { background: var(--red); border-color: var(--red); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1100px; margin: auto; }
-        .card { background: #111; padding: 20px; border-radius: 15px; text-align: center; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
-        .card:hover { border-color: var(--red); transform: translateY(-5px); }
-        .card i { font-size: 25px; color: var(--red); margin-bottom: 10px; display: block; }
-        footer { text-align: center; padding: 40px; border-top: 1px solid #222; }
-        .wa-btn { background: #25d366; color: black; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; display: inline-block; margin-bottom: 20px; }
+        .tab { padding: 10px 25px; background: #111; border-radius: 12px; cursor: pointer; border: 1px solid #222; white-space: nowrap; transition: 0.3s; color: #888; font-weight: 600; }
+        .tab.active { background: var(--red); color: white; border-color: var(--red); box-shadow: 0 5px 15px rgba(255,0,0,0.3); }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; padding: 20px; max-width: 1100px; margin: auto; min-height: 300px; }
+        .card { background: #111; padding: 25px 10px; border-radius: 15px; text-align: center; border: 1px solid #222; cursor: pointer; transition: 0.3s; }
+        .card:hover { border-color: var(--red); transform: translateY(-5px); background: #1a0000; }
+        .card i { font-size: 28px; color: var(--red); margin-bottom: 10px; display: block; }
+        .card span { font-size: 13px; font-weight: 500; }
+
+        footer { text-align: center; padding: 60px; border-top: 1px solid #111; margin-top: 40px; }
+        .wa-btn { background: #25d366; color: black; padding: 12px 35px; border-radius: 50px; text-decoration: none; font-weight: 800; display: inline-block; margin-bottom: 20px; }
     </style>
 </head>
 <body>
 
 <section class="hero">
     <h1>DILSE TV</h1>
-    <p>Premium Live HD Experience</p>
+    <p style="color: #666;">Developed by Awais Haider</p>
 </section>
 
-<div class="search-box">
-    <input type="text" id="searchInput" placeholder="Search Channels...">
+<div class="search-area">
+    <input type="text" id="search" class="search-bar" placeholder="Search for channels...">
 </div>
 
 <div class="player-container">
-    <div class="video-box" id="vContainer">
-        <div id="loading-overlay">LOADING DILSE TV...</div>
-        <video id="mainPlayer" controls playsinline></video>
+    <div class="video-wrapper">
+        <div id="loader-ui">DILSE TV LOADING...</div>
+        <video id="player" controls autoplay playsinline></video>
     </div>
 </div>
 
 <div class="tabs">
     <div class="tab active" data-cat="Sports">Sports</div>
     <div class="tab" data-cat="Tamasha Premium">Premium</div>
-    <div class="tab" data-cat="Kids Zone">Kids Zone</div>
-    <div class="tab" data-cat="India">India</div>
+    <div class="tab" data-cat="Kids">Kids Zone</div>
     <div class="tab" data-cat="Global">Global</div>
 </div>
 
-<div class="grid" id="mainGrid"></div>
+<div class="grid" id="grid"></div>
 
 <footer>
     <a href="https://whatsapp.com/channel/0029Vb75PUl4NViorkmONR0T" class="wa-btn" target="_blank">JOIN WHATSAPP</a>
-    <div style="font-size: 12px; color: #555;">Developed by <b>Awais Haider</b></div>
+    <div style="font-size: 11px; color: #444; letter-spacing: 2px;">© 2024 DILSE TV OFFICIAL • AWAIS HAIDER</div>
 </footer>
 
 <script>
 (function(){
-    // IMPORTANT: Matching Backend Key
-    const _0x_k = () => "dilse-tv-premium-key-secure-32ch";
-
-    const video = document.getElementById("mainPlayer");
-    const loader = document.getElementById("loading-overlay");
-    const grid = document.getElementById("mainGrid");
-    const search = document.getElementById("searchInput");
+    const K = "dilse-tv-premium-key-secure-32ch"; 
+    const video = document.getElementById("player");
+    const loader = document.getElementById("loader-ui");
+    const grid = document.getElementById("grid");
     let allData = [];
     let activeCat = "Sports";
     let hls = null;
 
     function decrypt(cipher, ivHex) {
         try {
-            const key = CryptoJS.enc.Utf8.parse(_0x_k());
+            const key = CryptoJS.enc.Utf8.parse(K);
             const iv = CryptoJS.enc.Hex.parse(ivHex);
             const dec = CryptoJS.AES.decrypt({ ciphertext: CryptoJS.enc.Hex.parse(cipher) }, key, { iv: iv, mode: CryptoJS.lib.Mode.CBC, padding: CryptoJS.lib.Pad.Pkcs7 });
             return dec.toString(CryptoJS.enc.Utf8);
@@ -87,27 +88,53 @@
     }
 
     async function init() {
-        grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Fetching Encrypted Data...</p>";
+        grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>Decrypting Secure Stream...</p>";
         try {
             const res = await fetch('/api/getChannels');
-            const data = await res.json();
-            if(data.error) throw new Error(data.error);
-            const raw = decrypt(data.d, data.i);
+            const result = await res.json();
+            const raw = decrypt(result.d, result.i);
             allData = JSON.parse(raw);
-            render("Sports");
+            loadCategory("Sports");
         } catch (e) {
-            grid.innerHTML = `<p style='grid-column:1/-1; text-align:center; color:red;'>Error: ${e.message}</p>`;
+            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center; color:red;'>Security Error: Failed to fetch channels.</p>";
         }
     }
 
-    function render(cat) {
+    function loadCategory(cat) {
         activeCat = cat;
         const filtered = allData.filter(c => c.group === cat);
         grid.innerHTML = "";
         if(filtered.length === 0) {
-            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center;'>No channels found in this category.</p>";
-            return;
+            grid.innerHTML = "<p style='grid-column:1/-1; text-align:center; color:gray;'>No channels found in this category.</p>";
+        } else {
+            filtered.forEach(ch => {
+                const card = document.createElement("div");
+                card.className = "card";
+                card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
+                card.onclick = () => play(ch.url);
+                grid.appendChild(card);
+            });
         }
+    }
+
+    function play(url) {
+        loader.style.display = "flex";
+        window.scrollTo({ top: 380, behavior: 'smooth' });
+        if(hls) hls.destroy();
+        if (Hls.isSupported()) {
+            hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => { video.play(); loader.style.display="none"; });
+        } else {
+            video.src = url; video.play();
+            video.onplaying = () => loader.style.display="none";
+        }
+    }
+
+    // Search Logic
+    document.getElementById("search").oninput = (e) => {
+        const val = e.target.value.toLowerCase();
+        const filtered = allData.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
+        grid.innerHTML = "";
         filtered.forEach(ch => {
             const card = document.createElement("div");
             card.className = "card";
@@ -115,44 +142,14 @@
             card.onclick = () => play(ch.url);
             grid.appendChild(card);
         });
-    }
-
-    function play(url) {
-        loader.style.display = "flex";
-        window.scrollTo({ top: 350, behavior: 'smooth' });
-        if(hls) hls.destroy();
-        if (Hls.isSupported()) {
-            hls = new Hls(); hls.loadSource(url); hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => { video.play(); loader.style.display="none"; });
-        } else {
-            video.src = url;
-            video.play();
-            video.onplaying = () => loader.style.display="none";
-        }
-    }
-
-    search.oninput = (e) => {
-        const val = e.target.value.toLowerCase();
-        const filtered = allData.filter(c => c.group === activeCat && c.name.toLowerCase().includes(val));
-        renderList(filtered);
     };
 
-    function renderList(list) {
-        grid.innerHTML = "";
-        list.forEach(ch => {
-            const card = document.createElement("div");
-            card.className = "card";
-            card.innerHTML = `<i class="fa-solid fa-play-circle"></i><span>${ch.name}</span>`;
-            card.onclick = () => play(ch.url);
-            grid.appendChild(card);
-        });
-    }
-
+    // Tabs Logic
     document.querySelectorAll(".tab").forEach(t => {
         t.onclick = () => {
             document.querySelectorAll(".tab").forEach(x => x.classList.remove("active"));
             t.classList.add("active");
-            render(t.dataset.cat);
+            loadCategory(t.dataset.cat);
         };
     });
 
